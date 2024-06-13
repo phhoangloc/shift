@@ -1,0 +1,12 @@
+
+GET http://localhost:3000/api/
+Content-Type: application/json
+Authorization: "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NWVkY2ZlODU4MGE2ZWY1MmE5NjE2OCIsImlhdCI6MTcxODI0MTcyOCwiZXhwIjoxNzE4MzI4MTI4fQ.sAp8XpPZ0NCpc7bu7mr5BQfUbfFixW0-jkD4i8V6i3A
+###
+post http://localhost:3000/
+Content-Type: application/json
+
+{
+    "username":"locpham",
+    "password":"123456"
+}
