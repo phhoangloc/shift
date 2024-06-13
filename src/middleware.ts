@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server'
-import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
 
-const allowedIPs = ['122.209.142.173'];
+const allowedIPs = ['192.168.1.1'];
 
-export default function middleware(req: NextApiRequest) {
+export default async function middleware(req: NextRequest) {
 
-    const ip: string | string[] | undefined = req.headers['x-forwarded-for']
+    const ip: any = req.headers.get('x-forwarded-for');
     console.log(ip)
 
-    if (!allowedIPs.includes('122.209.142.173')) {
+    if (!allowedIPs.includes('192.168.1.1')) {
         return NextResponse.redirect(new URL('/error', req.url))
     } else {
         return NextResponse.next()
