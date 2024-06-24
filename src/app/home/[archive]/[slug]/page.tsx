@@ -13,8 +13,6 @@ const Page = ({ params }: Props) => {
     const getNew = async (g: string, s: string, pre: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s, pre: pre })
 
-        console.log(result)
-
         if (result.success) {
             setNews(result.data[0])
         } else {
@@ -33,7 +31,7 @@ const Page = ({ params }: Props) => {
         <div className='detail'>
             <div className='cover'>
                 {news?.cover?.name ?
-                    <Image src={process.env.FTP_URL + "img/" + news.cover?.name} alt='item' fill /> :
+                    <Image src={process.env.FTP_URL + "img/" + news.cover?.name} alt='item' fill unoptimized /> :
                     null}
 
                 <h1>

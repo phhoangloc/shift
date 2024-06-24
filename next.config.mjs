@@ -1,14 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        // remotePatterns: [
-        //     {
-        //         protocol: 'https',
-        //         hostname: 'www.locpham.free.nf',
-        //         pathname: '/img/*'
-        //     },
-        // ],
-        domains: ['locpham.free.nf'],
+        remotePatterns: [
+            {
+                protocol: 'http',
+                hostname: 'locpham.free.nf',
+            },
+        ],
     },
     env: {
         MONGODB_URL: "mongodb+srv://h-loc:6pS3qvpeUQxuubKi@cluster0.kvimrln.mongodb.net/shift?retryWrites=true&w=majority",
