@@ -2,6 +2,7 @@
 import NoUser from '@/api/noUser'
 import React, { useEffect, useState } from 'react'
 import moment from 'moment'
+import Image from 'next/image'
 type Props = {
     params: { archive: string, slug: string }
 }
@@ -30,8 +31,16 @@ const Page = ({ params }: Props) => {
 
     return (
         <div className='detail'>
-            <h1>{news?.title}</h1>
-            <p>{moment(news?.createDate).format('YY/MM/DD')}</p>
+            <div className='cover'>
+                {news?.cover?.name ?
+                    <Image src={process.env.FTP_URL + "img/" + news.cover?.name} alt='item' fill /> :
+                    null}
+
+                <h1>
+                    {news?.title}<br></br>
+                    <span>{news?.position}</span>
+                </h1>
+            </div>
             <div className='dangerousBox' dangerouslySetInnerHTML={{ __html: news?.content }} />
         </div>
     )

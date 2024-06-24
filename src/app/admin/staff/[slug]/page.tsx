@@ -4,11 +4,14 @@ import store from '@/redux/store'
 import NoUser from '@/api/noUser'
 import Input from '@/component/input/input'
 import TextAreaTool from '@/component/input/textareaTool'
-import Accordion from '@/component/tool/accordion'
 import Button from '@/component/input/button'
 import { UserAuthen } from '@/api/UserAuthen'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import UploadIcon from '@mui/icons-material/Upload';
+import Image from 'next/image'
+import ImageModal from '@/component/modal/imageModal'
+import Accordion from '@/component/tool/accordion'
 type Props = {
     params: { slug: string }
 }
@@ -27,39 +30,18 @@ const Page = ({ params }: Props) => {
     })
 
     const [loading, setLoading] = useState<boolean>(true)
+    const [modalOpen, setModalOpen] = useState<boolean>(false)
 
     const [title, setTitle] = useState<string>("")
     const [modelName, setModelName] = useState<string>("")
     const [id, setId] = useState<string>("")
     const [slug, setSlug] = useState<string>("")
-    const [category, setCategory] = useState<string>("")
+    const [position, setPosition] = useState<string>("")
+    const [cover, setCover] = useState<string>("")
     const [content, setContent] = useState<string>("")
     const [newContent, setNewContent] = useState<string>("")
-    const [model, setModel] = useState<any[]>([])
+    const [preview, setPreview] = useState<any>("")
 
-    const [name, setName] = useState<string>("")
-    const [email, setEmail] = useState<string>("")
-    const [phone, setPhone] = useState<string>("")
-    const [sendMailContent, setSendMailContent] = useState<string>("")
-
-    const bodyMail = {
-        name,
-        email,
-        phone,
-        content: sendMailContent,
-        title,
-        slug: email + title + "true",
-        resend: true,
-    }
-
-    const getModel = async () => {
-        const result = await NoUser.getModel()
-        setModel(result)
-    }
-
-    useEffect(() => {
-        getModel()
-    }, [])
 
     const getItem = async (g: string, s: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s })
@@ -68,11 +50,9 @@ const Page = ({ params }: Props) => {
             setId(result.data[0]._id)
             setTitle(result.data[0].title)
             setSlug(result.data[0].slug)
-            setCategory(result.data[0].category)
+            setPosition(result.data[0].position)
             setContent(result.data[0].content)
-            setName(result.data[0].name)
-            setEmail(result.data[0].email)
-            setPhone(result.data[0].phone)
+            setCover(result.data[0].cover._id)
             setLoading(false)
 
         } else {
@@ -80,37 +60,42 @@ const Page = ({ params }: Props) => {
             setId("")
             setTitle("")
             setSlug("")
-            setCategory("")
             setNewContent("")
-            setName("")
-            setEmail("")
-            setPhone("")
             setLoading(false)
         }
     }
 
+    const getPicbyId = async (p: string, id: string) => {
+        const result = await UserAuthen.getPicById(p, id)
+        if (result.success) {
+            setPreview(process.env.FTP_URL + "img/" + result.data[0].name)
+        }
+    }
 
     useEffect(() => {
-        getItem("news", params.slug)
-    }, [model])
+        getItem("staff", params.slug)
+    }, [])
 
+    useEffect(() => {
+        cover && getPicbyId(currentUser.position, cover)
+    }, [cover])
 
 
     const body = {
-        title, slug, category, content: newContent || content
+        title, slug, position, cover, content: newContent || content
     }
 
     const updateNews = async (body: any, id: string) => {
-        const result = await UserAuthen.editItem(currentUser.position, "news", body, id)
+        const result = await UserAuthen.editItem(currentUser.position, "staff", body, id)
         if (result.success) {
-            toPage.push('/admin/news/' + slug)
+            toPage.push('/admin/staff/' + slug)
         }
     }
 
     const createNews = async (body: any) => {
-        const result = await UserAuthen.createItem(currentUser.position, "news", body)
+        const result = await UserAuthen.createItem(currentUser.position, "staff", body)
         if (result.success) {
-            toPage.push('/admin/news/' + slug)
+            toPage.push('/admin/staff/' + slug)
         }
     }
 
@@ -120,43 +105,61 @@ const Page = ({ params }: Props) => {
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
                 <div className={`item ${currentTheme ? "light1" : "dark1"}`}>
-                    <h2>タイトル : {title ? title : "新規タイトル"}</h2>
+                    <h2>名前 : {title ? title : "新規スタッフ"}</h2>
                     <div style={{ display: "flex" }}><p>プレビュー </p>
-
                         {slug ?
                             <Link
-                                href={'/home/news/previewad31'}
+                                href={'/home/staff/previewad31'}
                                 target='_blank'>
-                                <p onClick={() => { updateNews({ title, category, slug: "previewad31", content: newContent || content }, "665feb4450f19c296fbcad31") }}>{'/home/news/previewad31'}</p>
+                                <p onClick={() => { updateNews({ title, cover, slug: "previewad31", content: newContent || content }, "667239ab9bea006d3b093edb") }}>{'/home/staff/previewad31'}</p>
                             </Link> :
                             "新規リンク"}
                     </div>
                 </div>
                 <div className={`item ${currentTheme ? "light1" : "dark1"}`}>
-                    <div className='edittitle'><h3>このページの編集 <span onClick={() => toPage.push("/admin/news/news")}>{modelName && `新規の${modelName}`}</span></h3></div>
-                    <Input name="タイトル" onChange={(v) => setTitle(v)} value={title} />
+                    <div className='edittitle'><h3>この{modelName}の編集 <span onClick={() => toPage.push("/admin/staff/news")}>{modelName && `新規の${modelName}`}</span></h3></div>
+                    <Input name="名前" onChange={(v) => setTitle(v)} value={title} />
                     <Input name="スラグ" onChange={(v) => setSlug(v)} value={slug} />
-                    <Accordion title={category ? category : "category"}
+                    <Accordion title={position ? position : "職種"}
                         data={[
                             {
                                 name: "---",
-                                func: () => setCategory(""),
+                                func: () => setPosition(""),
                             },
                             {
-                                name: "お知らせ",
-                                func: () => setCategory("お知らせ"),
+                                name: "社長",
+                                func: () => setPosition("社長"),
                             },
                             {
-                                name: "災害情報",
-                                func: () => setCategory("災害情報"),
-                            }]} width='max-content'
+                                name: "部長",
+                                func: () => setPosition("部長"),
+                            },
+                            {
+                                name: "社員",
+                                func: () => setPosition("社員"),
+                            },
+                            {
+                                name: "バイト",
+                                func: () => setPosition("バイト"),
+                            },
+                        ]} width='max-content'
                     />
+                    <div style={{ position: "relative", minHeight: "50px", minWidth: "100px" }}>
+                        <p>photo:</p>
+                        <div>
+                            {
+                                preview && <Image src={preview} alt='item' width={500} height={500} style={{ width: "100%", height: "auto" }} />
+                            }
+                            <UploadIcon onClick={(e) => setModalOpen(true)} style={{ position: "absolute", zIndex: 1, background: "white", borderRadius: "5px", bottom: "5px", right: "5px", padding: "1px" }} />
+                        </div>
+                    </div>
                     <TextAreaTool onChange={(v) => setNewContent(v)} value={content} />
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.back()} />
                         {id ? <Button name='保存' onClick={() => updateNews(body, id)} /> : <Button name='作成' onClick={() => createNews(body)} />}
                     </div>
                 </div>
+                <ImageModal modalOpen={modalOpen} onCanel={() => setModalOpen(false)} onSubmit={(id) => { setModalOpen(false), setCover(id) }} />
             </div>
     )
 

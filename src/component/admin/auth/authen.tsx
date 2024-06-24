@@ -29,9 +29,9 @@ const Authen = ({ children }: Props) => {
                 </div>
             </div>
             :
-            <div>
-                <h3>you havent logged in yet</h3>
-                <Button name='Login' onClick={() => toPage.push("/login")} />
+            <div style={{ width: "100%", height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center" }}>
+                <h3>まだログインしていません</h3>
+                <div style={{ margin: "10px auto" }}><Button name='ロギング' onClick={() => toPage.push("/login")} /></div>
             </div>
     )
 }

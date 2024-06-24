@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import NoUser from '@/api/noUser'
 import moment from 'moment'
+import Image from 'next/image'
 type Props = {
     params: { archive: string }
 }
@@ -29,21 +30,33 @@ const Page = ({ params }: Props) => {
         getItem(params.archive, category)
     }, [category])
 
+
+    const memberSum = 10
+
     return (
         <div className='archive'>
-            <div className='news'>
-                <h3>{pageName}</h3>
-                <div className='categorySelect'>
-                    <p onClick={() => setCategory("")}>すべて</p>
-                    <p onClick={() => setCategory("お知らせ")}>お知らせ</p>
-                    <p onClick={() => setCategory("災害情報")}>災害情報</p>
+            <div className='archive_title'>
+                <div className='archive_title_cover'>
+                    {Array.from({ length: memberSum }, (_, index) => index + 1).map((index: number) =>
+                        <div className='archive_title_cover_item' key={index}>
+                            <Image src={"/image/staffitem.jpg"} alt='item' fill style={{ animationDelay: `calc(0.2s * ${index}` }} />
+                        </div>)}
                 </div>
-                {news.map((n: any, index: number) =>
-                    <div key={index} className='item' >
-                        <h4 onClick={() => topage.push("/home/news/" + n.slug)}> {n.title}</h4>
-                        <p>{n.category}</p>
-                        <p>{moment(n.createDate).format('YY/MM/DD')}</p>
-                    </div>)}
+                <h1>マイ{pageName}</h1>
+            </div>
+            <div className='archive_body'>
+                <p>home / {params.archive}</p>
+                <div className='grid_box'>
+                    {news.map((n: any, index: number) =>
+                        <div key={index} className={`xs12 sm6 ${params.archive ? params.archive : 'item'}`} >
+                            <div className='cover'>
+                                {n.cover?.name ? <Image src={process.env.FTP_URL + "img/" + n.cover?.name} alt='item' fill /> : <Image src={"/image/staffitem.jpg"} alt='item' fill />}
+                            </div>
+                            <h3> {n.title}</h3>
+                            <div className='dangerousBox' dangerouslySetInnerHTML={{ __html: n.content }}></div>
+                            <p onClick={() => topage.push("/home/staff/" + n.slug)}>詳細</p>
+                        </div>)}
+                </div>
             </div>
         </div>
     )

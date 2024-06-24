@@ -6,7 +6,7 @@ type Props = {}
 
 const Page = (props: Props) => {
     return (
-        <div>Admin</div>
+        <div>管理画面TOP</div>
     )
 
 }

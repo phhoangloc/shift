@@ -149,22 +149,56 @@
 
 .archive {
     min-height: calc(100vh - 200px);
-    max-width: 1200px;
     margin: auto;
+    position: relative;
+
+    .archive_title {
+        height: 75vh;
+        max-height: 500px;
+        overflow: hidden;
+        position: relative;
+
+        .archive_title_cover {
+            display: flex;
+            flex-wrap: wrap;
+            width: 125%;
+
+            .archive_title_cover_item {
+                width: calc(25% - 2px);
+                margin: 1px;
+                height: 250px;
+                position: relative;
+
+                img {
+                    opacity: 0;
+                    object-fit: cover;
+                    animation: ani-title-picture 4s forwards;
+                }
+            }
+        }
+
+        h1 {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            font-size: 75px;
+            color: rgba($color: white, $alpha: 0.75);
+            animation: ani-title-text 5s forwards;
+            backdrop-filter: blur(0px) brightness(1);
+        }
+    }
 
     .news {
         width: 100%;
         max-width: 768px;
         margin: 50px auto;
-
-        h3 {
-            span {
-                font-size: 0.75rem;
-                opacity: 0.75;
-                margin: 0 5px;
-                cursor: pointer;
-            }
-        }
 
         .categorySelect {
             display: flex;
@@ -219,12 +253,133 @@
             }
         }
     }
+
+    .archive_body {
+        max-width: 768px;
+        margin: 100px auto;
+    }
+
+    .staff {
+        position: relative;
+        margin: 50px auto;
+        padding: 5px;
+
+        .cover {
+            width: 100%;
+            aspect-ratio: 1.5;
+            position: relative;
+
+            img {
+                object-fit: cover;
+            }
+        }
+
+        .dangerousBox {
+            text-wrap: nowrap;
+            height: 100px;
+            line-height: 25px;
+            font-family: serif;
+        }
+
+        h3 {
+            color: red;
+        }
+
+        p {
+            width: max-content;
+            margin: 0 10px 0 auto;
+            cursor: pointer;
+            opacity: 0.5;
+            font-family: serif;
+            font-size: 0.9rem;
+
+        }
+
+        p:hover {
+            color: darkcyan;
+            opacity: 0.75;
+        }
+    }
+}
+
+@keyframes ani-title-picture {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    25% {
+        transform: translateY(0%);
+        transform: translateX(0%);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(0%);
+        transform: translateX(-75%);
+        opacity: 1;
+    }
+}
+
+@keyframes ani-title-text {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    80% {
+        transform: translateY(100%);
+        opacity: 0;
+        backdrop-filter: blur(0px) brightness(1);
+
+    }
+
+    90% {
+        transform: translateY(0%);
+        opacity: 1;
+        backdrop-filter: blur(0px) brightness(1);
+
+    }
+
+    100% {
+        transform: translateY(0%);
+        opacity: 1;
+        backdrop-filter: blur(1px) brightness(0.5);
+
+    }
 }
 
 .detail {
     width: 90%;
     max-width: 768px;
     margin: 50px auto;
+
+    .cover {
+        position: relative;
+        aspect-ratio: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+
+        img {
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        h1 {
+            background-color: rgba(darkgreen, $alpha: 0.9);
+            width: max-content;
+            padding: 20px 50px;
+            color: white;
+            line-height: 0.75;
+            text-align: center;
+
+            span {
+                font-size: 50%;
+                opacity: 0.75;
+            }
+        }
+    }
 
     p {
         opacity: 0.75;

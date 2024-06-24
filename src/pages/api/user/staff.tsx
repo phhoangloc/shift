@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import connectMongoDB from '@/connect/database/mogoseDB'
-import { fpageModel } from '@/model/fpage.model'
+import { StaffModel } from '@/model/staff.model'
 const jwt = require('jsonwebtoken')
-
 
 export default async function handler(
     req: NextApiRequest,
@@ -13,19 +12,15 @@ export default async function handler(
     const method = req.method
     const body = req.body
     let result: any = { success: false };
-
     const authorization = req.headers['authorization']
     const token = authorization && authorization.split(" ")[1]
     const id = token && await jwt.verify(token, 'secretToken').id
 
-    var item: any = {}
-    var data: any[] = []
     connectMongoDB()
-
     if (id) {
         switch (method) {
             case "POST":
-                await fpageModel
+                await StaffModel
                     .create(body)
                     .catch((error: Error) => {
                         res.json(result)
@@ -33,14 +28,13 @@ export default async function handler(
                     })
                     .then((data: any) => {
                         result.success = true
-                        result.name = "固定ページ"
+                        result.name = "ニュース"
                         result.data = data
                         res.json(result)
                     })
                 break
-
             case "PUT":
-                await fpageModel
+                await StaffModel
                     .updateOne({ "_id": query.id }, body)
                     .catch((error: Error) => {
                         res.json(result)
@@ -48,21 +42,7 @@ export default async function handler(
                     })
                     .then((data: any) => {
                         result.success = true
-                        result.name = "固定ページ"
-                        result.data = data
-                        res.json(result)
-                    })
-                break
-            case "DELETE":
-                await fpageModel
-                    .deleteOne({ "_id": query.id })
-                    .catch((error: Error) => {
-                        res.json(result)
-                        throw error.message
-                    })
-                    .then((data: any) => {
-                        result.success = true
-                        result.name = "固定ページ"
+                        result.name = "ニュース"
                         result.data = data
                         res.json(result)
                     })

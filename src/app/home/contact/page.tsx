@@ -109,7 +109,7 @@ const Contact = (props: Props) => {
     return (
         <div className='detail'>
             <div className="contact">
-                <h2>問い合わせ</h2>
+                <h1>問い合わせ</h1>
                 <div className='item'>
                     <h4>名前</h4>
                     <input onChange={(e) => { setName(e.target.value) }} value={name} />

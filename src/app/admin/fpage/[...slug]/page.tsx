@@ -8,11 +8,13 @@ import Button from '@/component/input/button'
 import { UserAuthen } from '@/api/UserAuthen'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { setNotice } from '@/redux/reducer/noticeReducer'
 type Props = {
     params: { slug: string }
 }
 
 const Page = ({ params }: Props) => {
+
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
     const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
 
@@ -25,25 +27,13 @@ const Page = ({ params }: Props) => {
         update()
     })
 
-    const [loading, setLoading] = useState<boolean>(true)
-
+    const [loading, setLoading] = useState<boolean>(false)
     const [title, setTitle] = useState<string>("")
     const [modelName, setModelName] = useState<string>("")
     const [id, setId] = useState<string>("")
     const [slug, setSlug] = useState<string>("")
     const [content, setContent] = useState<string>("")
     const [newContent, setNewContent] = useState<string>("")
-    const [model, setModel] = useState<any[]>([])
-
-
-    const getModel = async () => {
-        const result = await NoUser.getModel()
-        setModel(result)
-    }
-
-    useEffect(() => {
-        getModel()
-    }, [])
 
     const getItem = async (g: string, s: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s })
@@ -65,12 +55,9 @@ const Page = ({ params }: Props) => {
         }
     }
 
-
     useEffect(() => {
-        getItem("fpage", params.slug)
-    }, [model])
-
-
+        params.slug[0] === "news" ? params.slug[1] ? getItem("fpage", params.slug[1]) : null : getItem("fpage", params.slug[0])
+    }, [])
 
     const body = {
         title, slug, content: newContent || content
@@ -92,6 +79,16 @@ const Page = ({ params }: Props) => {
 
     const toPage = useRouter()
 
+    const deleteItem = async (p: string, a: string, id: string) => {
+        const result = await UserAuthen.deleteItem(p, a, id)
+        if (result.success) {
+            toPage.push("/admin/fpage")
+            store.dispatch(setNotice({ success: result.success, msg: "この固定ページが削除されました。", open: true }))
+            setTimeout(() => {
+                store.dispatch(setNotice({ success: false, msg: "", open: false }))
+            }, 3000)
+        }
+    }
     return (
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
@@ -113,7 +110,11 @@ const Page = ({ params }: Props) => {
                     <Input name="タイトル" onChange={(v) => setTitle(v)} value={title} />
                     <Input name="スラグ" onChange={(v) => setSlug(v)} value={slug} />
                     <TextAreaTool onChange={(v) => setNewContent(v)} value={content} />
-                    {id ? <Button name='保存' onClick={() => updateNews(body, id)} /> : <Button name='作成' onClick={() => createNews(body)} />}
+                    <div style={{ display: 'flex' }}>
+                        <Button name='戻る' onClick={() => toPage.back()} />
+                        {params.slug[0] === "news" ? <Button name='作成' onClick={() => createNews(body)} /> : <Button name='保存' onClick={() => updateNews(body, id)} />}
+                        {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => deleteItem(currentUser.position, "fpage", id)} /> : null}
+                    </div>
                 </div>
             </div>
     )

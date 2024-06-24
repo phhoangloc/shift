@@ -29,7 +29,7 @@ const Accordion = ({ title, data, width }: Props) => {
         height: "40px",
         lineHeight: "40px",
         cursor: "pointer",
-        boxShadow: "0px 0px 2px  #888",
+        boxShadow: "0px 0px 5px  #888",
         borderRadius: "5px",
         padding: "0 5px",
         margin: "10px 0"

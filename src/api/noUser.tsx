@@ -30,7 +30,10 @@ const getItem = async ({ genre, slug, category, search, skip, limit, pre }: Quer
     const result = await axios.get(`/api/${genre}?slug=${slug ? slug : ""}&&category=${category ? category : ""}&&search=${search ? search : ""}&&skip=${skip ? skip : 0}&&limit=${limit ? limit : ""}&&pre=${pre ? pre : genre}`)
     return result.data
 }
-
+const getPicById = async (id: string) => {
+    const result = await axios.get(`api/pic?id=${id}`)
+    return result.data
+}
 const createMail = async (body: any) => {
     const result = await axios.post(`/api/mails/`, body, {
         headers: {
@@ -41,7 +44,7 @@ const createMail = async (body: any) => {
     return (result.data)
 }
 const NoUser = {
-    login, signup, getItem, getModel, createMail
+    login, signup, getItem, getModel, createMail, getPicById
 }
 
 export default NoUser

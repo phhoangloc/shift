@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import '../style/global.css'
+import '../style/grid.css'
 import Provider from "@/redux/component/provider";
 import DecideModal from "@/component/modal/decide.modal";
 

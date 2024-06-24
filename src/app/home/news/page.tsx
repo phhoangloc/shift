@@ -30,7 +30,7 @@ const Page = () => {
     return (
         <div className='archive'>
             <div className='news'>
-                <h3>{pageName}</h3>
+                <h1>{pageName}</h1>
                 <div className='categorySelect'>
                     <p onClick={() => setCategory("")}>すべて</p>
                     <p onClick={() => setCategory("お知らせ")}>お知らせ</p>

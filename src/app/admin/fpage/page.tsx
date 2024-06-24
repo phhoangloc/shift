@@ -4,21 +4,29 @@ import NoUser from '@/api/noUser'
 import { useRouter } from 'next/navigation'
 import store from '@/redux/store'
 import Pagination from '@/component/tool/pagination'
-import Input from '@/component/input/input'
-
+import SearchBox from '@/component/input/searchBox'
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { UserAuthen } from '@/api/UserAuthen'
+import { setNotice } from '@/redux/reducer/noticeReducer'
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import Link from 'next/link'
 const Page = () => {
 
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
-
+    const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
     const update = () => {
         store.subscribe(() => setCurrentTheme(store.getState().theme))
+        store.subscribe(() => setCurrentUser(store.getState().user))
     }
-
     useEffect(() => {
         update()
     })
 
-    const [loading, setLoading] = useState<boolean>(true)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [refresh, setRefresh] = useState<number>(0)
 
     const [news, setNews] = useState<any[]>([])
     const [pageName, setPageName] = useState<string>("")
@@ -60,24 +68,38 @@ const Page = () => {
     useEffect(() => {
         getItem("fpage", search, page * limit, limit)
         getItemPlus("fpage", search, page * limit, limit)
-    }, [search, page])
-
-    setTimeout(() => {
-        setLoading(false)
-    }, 2000)
+    }, [refresh, search, page])
 
     const toPage = useRouter()
+
+    const deleteItem = async (p: string, a: string, id: string) => {
+        const result = await UserAuthen.deleteItem(p, a, id)
+        if (result.success) {
+            setRefresh(n => n + 1)
+            store.dispatch(setNotice({ success: result.success, msg: "この固定ページが削除されました。", open: true }))
+            setTimeout(() => {
+                store.dispatch(setNotice({ success: false, msg: "", open: false }))
+            }, 3000)
+        }
+    }
     return (
         loading ? <div className={`archive`}>loading...</div> :
             <div className={`archive`}>
                 <div className={`items ${currentTheme ? "light1" : "dark1"}`}>
-                    <h3>{pageName} <span onClick={() => toPage.push("/admin/fpage/news")}>{pageName && `新規の${pageName}`}</span></h3>
-
-                    <Input name="search" onChange={(v) => setSearch(v)} value={search} />
+                    <div className='title_items'>
+                        <h3>{pageName} <span onClick={() => toPage.push("/admin/fpage/news")}>{pageName && `新規の${pageName}`}</span></h3>
+                        <SearchBox placehoder='検索' func={(v) => setSearch(v)} />
+                    </div>
                     {news.map((n: any, index: number) =>
-                        <div key={index} className='item'
-                            onClick={() => topage.push("/admin/fpage/" + n.slug)}>
-                            <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold" }}>{n.title}</h4>
+                        <div key={index} className='item'>
+                            <DescriptionOutlinedIcon />
+                            <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
+                            <div className="icons">
+                                <Link href={"/home/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
+                                <EditOutlinedIcon onClick={() => topage.push("/admin/fpage/" + n.slug)} />
+                                <ContentCopyIcon onClick={() => topage.push("/admin/fpage/news/" + n.slug)} />
+                                <DeleteOutlineOutlinedIcon onClick={() => deleteItem(currentUser.position, "fpage", n._id)} />
+                            </div>
                         </div>)}
                 </div>
                 <Pagination page={page} next={() => setPage(p => p + 1)} prev={() => setPage(p => p - 1)} end={end} />

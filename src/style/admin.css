@@ -7,13 +7,19 @@
 .admin .header {
   position: relative;
   display: flex;
-  line-height: 30px;
-  height: 30px;
-  padding: 0 5px;
+  line-height: 50px;
+  height: 50px;
+  padding: 0px 5px;
+}
+
+.admin .header a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .admin .header .iconSwitch {
   position: absolute;
+  top: 10px;
   right: 0px;
   cursor: pointer;
   width: 30px;
@@ -154,11 +160,29 @@
   box-shadow: 0px 0px 2px 0px #888;
 }
 
-.admin .archive .items h3 {
-  margin-bottom: 20px;
-  height: max-content;
+.admin .archive .items .title_items {
+  position: relative;
   display: flex;
-  line-height: 30px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.admin .archive .items .title_items svg {
+  cursor: pointer;
+}
+
+.admin .archive .items .title_items svg:hover {
+  background-color: var(--main);
+  color: white;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.admin .archive .items h3 {
+  height: 100%;
+  display: flex;
+  line-height: 40px;
+  font-size: 125%;
 }
 
 .admin .archive .items h3 svg {
@@ -184,24 +208,29 @@
 }
 
 .admin .archive .items .item {
-  line-height: 30px;
   padding: 5px;
   margin: 5px 0;
   border-bottom: 1px solid #aaa;
-  cursor: pointer;
+  display: flex;
 }
 
-.admin .archive .items .item .icon,
 .admin .archive .items .item svg {
   width: 30px;
   height: 30px;
   box-sizing: border-box;
+  margin: 5px;
   padding: 2.5px;
+  transition: all 0.1s;
+}
+
+.admin .archive .items .item h4 {
+  font-size: 125%;
+  line-height: 45px;
+  height: 40px;
 }
 
 .admin .archive .items .item h4 span {
   font-weight: normal;
-  font-size: small;
   padding-left: 10px;
 }
 
@@ -209,8 +238,47 @@
   margin-left: 5px;
 }
 
+.admin .archive .items .item .icons {
+  margin: 0 0 0 auto;
+}
+
+.admin .archive .items .item .icons svg {
+  cursor: pointer;
+}
+
+.admin .archive .items .item .icons svg:hover {
+  background-color: var(--main);
+  color: white;
+  border-radius: 50%;
+  padding: 5px;
+}
+
 .admin .archive .items .item:hover {
   background-color: rgba(211, 211, 211, 0.1);
+}
+
+.admin .archive .items .mail {
+  height: 50px;
+  line-height: 25px;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.admin .archive .items .mail h4 {
+  font-size: 1.1rem;
+}
+
+.admin .archive .items .mail h4 span {
+  font-size: 0.9rem;
+  opacity: 0.5;
+  margin-left: 10px;
+}
+
+.admin .archive .items .mail p,
+.admin .archive .items .mail h4 {
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
 }
 
 .admin .detail .item {
@@ -218,10 +286,6 @@
   border-radius: 5px;
   box-shadow: 0px 0px 2px 0px #888;
   margin: 5px 0;
-}
-
-.admin .detail .item h3 {
-  margin-bottom: 20px;
 }
 
 .admin .detail .item p span {

@@ -28,7 +28,6 @@ const Page = ({ params }: Props) => {
     return (
         <div className='detail'>
             <h1>{news?.title}</h1>
-            <p>{moment(news?.createDate).format('YY/MM/DD')}</p>
             <div className='dangerousBox' dangerouslySetInnerHTML={{ __html: news?.content }} />
         </div>
     )

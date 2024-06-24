@@ -1,11 +1,9 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import Button from '../input/button'
 import store from '@/redux/store'
-import { setAlert } from '@/redux/reducer/alertReducer'
 
 const NoticeModal = () => {
-  const [currentTheme, setCurrentTheme] = useState<any>(store.getState().theme)
+  const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
   const [currentNotice, setCurrentNotice] = useState<any>(store.getState().notice)
   const update = () => {
     store.subscribe(() => setCurrentTheme(store.getState().theme))
@@ -15,9 +13,43 @@ const NoticeModal = () => {
     update()
   })
 
+  const box: React.CSSProperties = {
+    position: "fixed",
+    height: "100vh",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    textAlign: "center",
+    backdropFilter: "blur(1px) brightness(0.9)",
+    zIndex: 2,
+    transform: "scale(0)"
+  }
+
+  const boxOpen: React.CSSProperties = {
+    transform: "scale(1)",
+
+  }
+
+  const textBox: React.CSSProperties = {
+    height: "max-content",
+    width: "100%",
+    margin: "auto",
+    maxWidth: "575px",
+    borderRadius: "5px",
+    padding: "10px",
+    transition: "all 0.25s",
+  }
+
+  const textBoxOpen: React.CSSProperties = {
+    transform: "inherit",
+
+  }
+
   return (
-    <div className={`ps-f w100p h100p dp-flex fd-col jc-center ta-center filter-brightness-90p zi-2 ${currentNotice.open ? 'trsf-scale-1' : 'trsf-scale-0'}`}>
-      <div className={`w100p h-mc mw-575px mg-auto br-5px pd-10px trss-1-2 trss-delay-1-4 ${currentNotice.open ? "" : "trsf-top--100p"} ${currentTheme ? 'themelight' : 'themedark'}`}>
+    <div style={currentNotice.open ? { ...box, ...boxOpen } : { ...box }}>
+      <div className={`${currentTheme ? 'light1' : 'dark1'}`}
+        style={currentNotice.open ? { ...textBox, ...textBoxOpen } : { ...textBox }}>
         <p>{currentNotice.msg}</p>
       </div>
     </div>

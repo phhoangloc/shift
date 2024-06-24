@@ -4,6 +4,8 @@ import store from '../store'
 import { setUser } from '../reducer/UserReduce'
 import { UserAuthen } from '@/api/UserAuthen'
 import "../../style/theme.css"
+import NoticeModal from '@/component/modal/notice.modal'
+import ImageModal from '@/component/modal/imageModal'
 type Props = {
     children: React.ReactNode
 }
@@ -40,12 +42,12 @@ const Provider = ({ children }: Props) => {
     }, [currentRefresh])
 
     return (
-        loading ? <p>loading...</p> : children
-        // <div className={`admin ${currentTheme ? "light" : "dark"}`}>
-        //     <div className="adminbody">
-        //     </div>
-        // </div>
-
+        loading ? <p>loading...</p> :
+            <>
+                <NoticeModal />
+                <ImageModal />
+                {children}
+            </>
     )
 }
 

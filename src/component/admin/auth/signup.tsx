@@ -75,14 +75,14 @@ const Signup = ({ archive }: Props) => {
     return (
         <div style={{ width: "90%", maxWidth: "375px", margin: "auto", padding: "5%", boxShadow: "0px 0px 3px #aaa", borderRadius: "5px" }}>
             <h3>Sign Up</h3>
-            <Input name='username' value={username} onChange={(data) => setUsername(data)} />
+            <Input name='ユーザー名' value={username} onChange={(data) => setUsername(data)} />
             <p style={{ fontSize: "0.6rem", color: "red" }}>{Error.username}</p>
-            <Input type='password' name='password' value={password} onChange={(data) => setPassword(data)} />
+            <Input type='パスワード' name='password' value={password} onChange={(data) => setPassword(data)} />
             <p style={{ fontSize: "0.6rem", color: "red" }}>{Error.password}</p>
-            <Input name='email' value={email} onChange={(data) => setEmail(data)} />
+            <Input name='eメール' value={email} onChange={(data) => setEmail(data)} />
             <p style={{ fontSize: "0.6rem", color: "red" }}>{Error.email}</p>
-            <div style={{ width: "max-content", margin: "20px auto 20px" }}><Button onClick={() => signup({ username, password, email })} name="Sign up" disable={isError} /></div>
-            <p style={{ cursor: "pointer", fontSize: "0.9rem" }} className='link' onClick={() => toPage.push("/login")}>log in</p>
+            <div style={{ width: "max-content", margin: "20px auto 20px" }}><Button onClick={() => signup({ username, password, email })} name="登録" disable={isError} /></div>
+            <p style={{ cursor: "pointer", fontSize: "0.9rem" }} className='link' onClick={() => toPage.push("/login")}>ロギング</p>
         </div>
     )
 }

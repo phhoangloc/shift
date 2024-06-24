@@ -67,7 +67,7 @@ const Page = ({ params }: Props) => {
                     {mails.sort((a: any, b: any) => b.id - a.id).map((n: any, index: number) =>
                         <div key={index}
                             onClick={() => updateMail(n.id)}
-                            className='item'>
+                            className='mail'>
                             <h4>{n.email}<span>{moment(n.date).format('MM/DD HH:mm')}</span></h4>
                             <p>{n.subject}</p>
                         </div>

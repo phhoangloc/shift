@@ -11,16 +11,17 @@ const Page = ({ params }: Props) => {
 
     const getNew = async (g: string, s: string, pre: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s, pre: pre })
+        console.log(result)
         if (result.success) {
             setNews(result.data[0])
         } else {
-
+            setNews({})
         }
     }
 
     useEffect(() => {
         params.slug === "previewad31" ?
-            getNew("news", params.slug, "newspreview")
+            getNew("news", params.slug, "preview")
             :
             getNew("news", params.slug, "")
     }, [])

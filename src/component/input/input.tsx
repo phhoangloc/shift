@@ -73,10 +73,10 @@ const Input = ({ onChange, name, value, type, onfocus, disabled, warn }: Props) 
     }
 
     return (
-        <div style={focus || value ? { ...box, ...boxFocus } : { ...box }}>
-            <p style={focus || value ? { ...title, ...titleFocus } : { ...title }}>{name}<span style={{ margin: "0 5px", fontSize: "60%", color: "red", fontWeight: "bold" }}>{warn ? warn : ""}</span></p>
+        <div style={{ ...box, ...boxFocus }}>
+            <p style={{ ...title, ...titleFocus }}>{name}<span style={{ margin: "0 5px", fontSize: "60%", color: "red", fontWeight: "bold" }}>{warn ? warn : ""}</span></p>
             <input
-                style={focus || value ? { ...inputBox, ...inputBoxForcus } : { ...inputBox }}
+                style={{ ...inputBox, ...inputBoxForcus }}
                 disabled={disabled ? disabled : false}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}

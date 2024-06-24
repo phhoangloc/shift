@@ -11,6 +11,7 @@ import { setMenu } from '@/redux/reducer/MenuReduce';
 import store from '@/redux/store';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import PeopleIcon from '@mui/icons-material/People';
 type Props = {}
 
 const Menu = (props: Props) => {
@@ -46,8 +47,13 @@ const Menu = (props: Props) => {
             link: "/news"
         },
         {
+            icon: <PeopleIcon />,
+            name: "スタッフ",
+            link: "/staff"
+        },
+        {
             icon: <EmailIcon />,
-            name: "メール",
+            name: "問い合わせ",
             link: "/mails"
         },
     ]
