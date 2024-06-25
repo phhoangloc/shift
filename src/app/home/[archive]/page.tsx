@@ -49,7 +49,6 @@ const Page = ({ params }: Props) => {
                     {news.map((n: any, index: number) =>
                         <div key={index} className={`xs12 sm6 ${params.archive ? params.archive : 'item'}`} >
                             <div className='cover'>
-                                {/* {n.cover?.name ? <Image src={process.env.FTP_URL + "img/" + n.cover?.name} alt='item' fill unoptimized /> : <Image src={"/image/staffitem.jpg"} alt='item' fill />} */}
                                 {n.cover?.name ? <Image src={process.env.FTP_URL + "img/" + n.cover?.name} alt='item' fill /> : <Image src={"/image/staffitem.jpg"} alt='item' fill />}
                             </div>
                             <h3> {n.title}</h3>

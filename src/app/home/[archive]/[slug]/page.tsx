@@ -31,7 +31,7 @@ const Page = ({ params }: Props) => {
         <div className='detail'>
             <div className='cover'>
                 {news?.cover?.name ?
-                    <Image src={process.env.FTP_URL + "img/" + news.cover?.name} alt='item' fill unoptimized /> :
+                    <Image src={process.env.FTP_URL + "img/" + news.cover?.name} alt='item' fill /> :
                     null}
 
                 <h1>

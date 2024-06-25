@@ -5,6 +5,8 @@ const nextConfig = {
             {
                 protocol: 'http',
                 hostname: 'locpham.free.nf',
+                port: "",
+                pathname: "/**"
             },
         ],
     },
