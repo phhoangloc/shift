@@ -49,7 +49,10 @@ const Page = ({ params }: Props) => {
                     {news.map((n: any, index: number) =>
                         <div key={index} className={`xs12 sm6 ${params.archive ? params.archive : 'item'}`} >
                             <div className='cover'>
-                                {n.cover?.name ? <Image src={process.env.FTP_URL + "img/" + n.cover?.name} alt='item' fill unoptimized={false} /> : <Image src={"/image/staffitem.jpg"} alt='item' fill />}
+                                {n.cover?.name ?
+                                    <Image src={process.env.FTP_URL + "img/" + n.cover?.name} alt='item' fill unoptimized={false} sizes='100%' />
+                                    :
+                                    <Image src={"/image/staffitem.jpg"} alt='item' fill sizes='100%' />}
                             </div>
                             <h3> {n.title}</h3>
                             <div className='dangerousBox' dangerouslySetInnerHTML={{ __html: n.content }}></div>
