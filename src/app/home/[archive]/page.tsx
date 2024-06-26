@@ -38,7 +38,7 @@ const Page = ({ params }: Props) => {
                 <div className='archive_title_cover'>
                     {Array.from({ length: memberSum }, (_, index) => index + 1).map((index: number) =>
                         <div className='archive_title_cover_item' key={index}>
-                            <Image src={"/image/staffitem.jpg"} alt='item' fill style={{ animationDelay: `calc(0.2s * ${index}` }} />
+                            <Image src={"/image/staffitem.jpg"} alt='item' fill style={{ animationDelay: `calc(0.2s * ${index}` }} sizes='100%' />
                         </div>)}
                 </div>
                 <h1>マイ{pageName}</h1>
@@ -49,10 +49,11 @@ const Page = ({ params }: Props) => {
                     {news.map((n: any, index: number) =>
                         <div key={index} className={`xs12 sm6 ${params.archive ? params.archive : 'item'}`} >
                             <div className='cover'>
-                                {n.cover?.name ?
+                                {/* {n.cover?.name ?
                                     <Image src={process.env.FTP_URL + "img/" + n.cover?.name} alt='item' fill unoptimized={false} sizes='100%' />
                                     :
-                                    <Image src={"/image/staffitem.jpg"} alt='item' fill sizes='100%' />}
+                                } */}
+                                <Image src={"/image/staffitem.jpg"} alt='item' fill sizes='100%' />
                             </div>
                             <h3> {n.title}</h3>
                             <div className='dangerousBox' dangerouslySetInnerHTML={{ __html: n.content }}></div>
