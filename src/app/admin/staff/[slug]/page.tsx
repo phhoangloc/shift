@@ -68,7 +68,7 @@ const Page = ({ params }: Props) => {
     const getPicbyId = async (p: string, id: string) => {
         const result = await UserAuthen.getPicById(p, id)
         if (result.success) {
-            setPreview(process.env.FTP_URL + "img/" + result.data[0].name)
+            setPreview(process.env.FTP_URL + "img/shift/" + result.data[0].name)
         }
     }
 
@@ -144,15 +144,15 @@ const Page = ({ params }: Props) => {
                             },
                         ]} width='max-content'
                     />
-                    {/* <div style={{ position: "relative", minHeight: "50px", minWidth: "100px" }}>
-                        <p>photo:</p>
+                    <div style={{ position: "relative", minHeight: "50px", minWidth: "100px" }}>
+                        <p>画像:</p>
                         <div>
                             {
-                                preview && <Image src={preview} alt='item' width={500} height={500} style={{ width: "100%", height: "auto" }} />
+                                preview && <Image src={preview} alt='item' width={500} height={500} style={{ width: "100%", height: "auto" }} priority sizes='100%' />
                             }
                             <UploadIcon onClick={(e) => setModalOpen(true)} style={{ position: "absolute", zIndex: 1, background: "white", borderRadius: "5px", bottom: "5px", right: "5px", padding: "1px" }} />
                         </div>
-                    </div> */}
+                    </div>
                     <TextAreaTool onChange={(v) => setNewContent(v)} value={content} />
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.back()} />

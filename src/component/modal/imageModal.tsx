@@ -94,13 +94,13 @@ const ImageModal = ({ modalOpen, onCanel, onSubmit }: Props) => {
                                 boxShadow: selectImageId.toString() === item._id.toString() ? "0px 0px 10px #888" : "0px 0px 1px  #888",
                                 cursor: "pointer",
                             }}>
-                                <Image quality={100} src={process.env.FTP_URL + "img/" + item.name} fill alt=""
+                                <Image quality={100} src={process.env.FTP_URL + "img/shift/" + item.name} fill alt=""
                                     style={{
                                         objectFit: "cover",
                                         transition: "all 0.25s",
                                         transform: selectImageId.toString() === item._id.toString() ? "scale(1.025)" : "scale(1)",
 
-                                    }} onClick={() => setSelectImageId(i => i.toString() !== item._id.toString() ? item._id : "")} />
+                                    }} onClick={() => setSelectImageId(i => i.toString() !== item._id.toString() ? item._id : "")} priority sizes='100%' />
                                 <DeleteIcon
                                     onClick={() => { deleteImage(currentUser.position, "pic", item._id) }}
                                     style={{ position: "absolute", zIndex: 1, background: "white", borderRadius: "5px", top: "5px", left: "5px", padding: "1px" }} />

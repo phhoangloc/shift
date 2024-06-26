@@ -30,10 +30,10 @@ const Page = ({ params }: Props) => {
     return (
         <div className='detail'>
             <div className='cover'>
-                {/* {news?.cover?.name ?
-                    <Image src={process.env.FTP_URL + "img/" + news.cover?.name} alt='item' fill /> :
-                    null} */}
-                <Image src={"/image/staffitem.jpg"} alt='item' fill sizes='100%' />
+                {news?.cover?.name ?
+                    <Image src={process.env.FTP_URL + "img/shift/" + news.cover?.name} alt='item' fill /> :
+                    <Image src={"/image/staffitem.jpg"} alt='item' fill sizes='100%' />
+                }
                 <h1>
                     {news?.title}<br></br>
                     <span>{news?.position}</span>
