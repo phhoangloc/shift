@@ -6,6 +6,7 @@ import { UserAuthen } from '@/api/UserAuthen'
 import "../../style/theme.css"
 import NoticeModal from '@/component/modal/notice.modal'
 import ImageModal from '@/component/modal/imageModal'
+import NoUser from '@/api/noUser'
 type Props = {
     children: React.ReactNode
 }
@@ -27,6 +28,7 @@ const Provider = ({ children }: Props) => {
     const [loading, setLoading] = useState<boolean>(true)
     const checkLogin = async () => {
         setLoading(true)
+        await NoUser.getItem({ genre: "pic" })
         const result = await UserAuthen.checkLogin()
         if (result.success) {
             store.dispatch(setUser(result.data))
