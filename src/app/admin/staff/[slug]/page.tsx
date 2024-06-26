@@ -144,7 +144,7 @@ const Page = ({ params }: Props) => {
                             },
                         ]} width='max-content'
                     />
-                    <div style={{ position: "relative", minHeight: "50px", minWidth: "100px" }}>
+                    {/* <div style={{ position: "relative", minHeight: "50px", minWidth: "100px" }}>
                         <p>photo:</p>
                         <div>
                             {
@@ -152,7 +152,7 @@ const Page = ({ params }: Props) => {
                             }
                             <UploadIcon onClick={(e) => setModalOpen(true)} style={{ position: "absolute", zIndex: 1, background: "white", borderRadius: "5px", bottom: "5px", right: "5px", padding: "1px" }} />
                         </div>
-                    </div>
+                    </div> */}
                     <TextAreaTool onChange={(v) => setNewContent(v)} value={content} />
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.back()} />
