@@ -4,9 +4,9 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'http',
-                hostname: "**",
+                hostname: "locpham.free.nf",
                 port: "",
-                // pathname: "/img/**"
+                pathname: "/img/**"
             },
         ],
     },
