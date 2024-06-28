@@ -6,10 +6,56 @@ div {
     box-sizing: border-box;
 }
 
+.title_hover:hover {
+    background-color: var(--main);
+    color: white;
+}
+
+.link_hover:hover {
+    color: var(--main);
+    font-weight: bold !important;
+}
+
 .box_hover:hover {
     background-color: whitesmoke;
 }
 
 .editcontent::-webkit-scrollbar {
     display: none;
+}
+
+.loading {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: whitesmoke;
+}
+
+.loading .text {
+    display: flex;
+    height: max-content;
+    margin: auto;
+}
+
+.loading .text h1 {
+    font-size: 400%;
+    color: var(--main);
+    margin: 0 10px;
+    animation: loadingAni 2s infinite;
+    text-shadow: 0px 0px 10px white;
+}
+
+@keyframes loadingAni {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.75);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }

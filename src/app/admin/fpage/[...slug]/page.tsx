@@ -28,6 +28,7 @@ const Page = ({ params }: Props) => {
     })
 
     const [loading, setLoading] = useState<boolean>(false)
+    const [savable, setSavable] = useState<boolean>(false)
     const [title, setTitle] = useState<string>("")
     const [modelName, setModelName] = useState<string>("")
     const [id, setId] = useState<string>("")
@@ -60,13 +61,13 @@ const Page = ({ params }: Props) => {
     }, [])
 
     const body = {
-        title, slug, content: newContent || content
+        title, slug, content: newContent || content, editDate: new Date()
     }
 
     const updateNews = async (body: any, id: string) => {
         const result = await UserAuthen.editItem(currentUser.position, "fpage", body, id)
         if (result.success) {
-            toPage.push('/admin/fpage/' + slug)
+            toPage.push('/admin/fpage/')
         }
     }
 
@@ -95,7 +96,6 @@ const Page = ({ params }: Props) => {
                 <div className={`item ${currentTheme ? "light1" : "dark1"}`}>
                     <h2>タイトル : {title ? title : "新規タイトル"}</h2>
                     <div style={{ display: "flex" }}><p>プレビュー </p>
-
                         {slug ?
                             <Link
                                 href={`/home/fpage/previewad31`}
@@ -107,12 +107,12 @@ const Page = ({ params }: Props) => {
                 </div>
                 <div className={`item ${currentTheme ? "light1" : "dark1"}`}>
                     <div className='edittitle'><h3>このページの編集 <span onClick={() => toPage.push("/admin/fpage/news")}>{modelName && `新規の${modelName}`}</span></h3></div>
-                    <Input name="タイトル" onChange={(v) => setTitle(v)} value={title} />
-                    <Input name="スラグ" onChange={(v) => setSlug(v)} value={slug} />
-                    <TextAreaTool onChange={(v) => setNewContent(v)} value={content} />
+                    <Input name="タイトル" onChange={(v) => { setSavable(true), setTitle(v) }} value={title} />
+                    <Input name="スラグ" onChange={(v) => { setSavable(true), setSlug(v) }} value={slug} />
+                    <TextAreaTool onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} />
                     <div style={{ display: 'flex' }}>
-                        <Button name='戻る' onClick={() => toPage.back()} />
-                        {params.slug[0] === "news" ? <Button name='作成' onClick={() => createNews(body)} /> : <Button name='保存' onClick={() => updateNews(body, id)} />}
+                        <Button name='戻る' onClick={() => toPage.push('/admin/fpage/')} />
+                        {params.slug[0] === "news" ? <Button name='作成' onClick={() => createNews(body)} /> : <Button name='保存' onClick={() => updateNews(body, id)} disable={!savable} />}
                         {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => deleteItem(currentUser.position, "fpage", id)} /> : null}
                     </div>
                 </div>

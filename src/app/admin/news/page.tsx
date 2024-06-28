@@ -12,6 +12,10 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import SearchBox from '@/component/input/searchBox'
 import Link from 'next/link'
+import moment from 'moment'
+import { UserAuthen } from '@/api/UserAuthen'
+import { setNotice } from '@/redux/reducer/noticeReducer'
+import Loading from '@/component/loading'
 type Props = {
     params: { archive: string }
 }
@@ -19,37 +23,29 @@ type Props = {
 const Page = ({ params }: Props) => {
 
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
-
+    const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
     const update = () => {
         store.subscribe(() => setCurrentTheme(store.getState().theme))
+        store.subscribe(() => setCurrentUser(store.getState().user))
     }
-
     useEffect(() => {
         update()
     })
 
     const [loading, setLoading] = useState<boolean>(true)
+    const [refresh, setRefresh] = useState<number>(0)
 
     const [news, setNews] = useState<any[]>([])
     const [pageName, setPageName] = useState<string>("")
-    const [model, setModel] = useState<any[]>([])
 
     const [search, setSearch] = useState<string>("")
     const [page, setPage] = useState<number>(0)
     const [limit, setLimit] = useState<number>(10)
     const [end, setEnd] = useState<boolean>(true)
 
-    const getModel = async () => {
-        const result = await NoUser.getModel()
-        setModel(result)
-    }
 
-    useEffect(() => {
-        getModel()
-    }, [])
-
-    const getItem = async (g: string, s: string, sk: number, li: number) => {
-        const result = await NoUser.getItem({ genre: g, search: s, skip: sk, limit: li })
+    const getItem = async (g: string, s: string, sk: number, li: number, sort: string) => {
+        const result = await NoUser.getItem({ genre: g, search: s, skip: sk, limit: li, sort: sort })
         if (result.success) {
             setNews(result.data)
             setPageName(result.name)
@@ -60,25 +56,37 @@ const Page = ({ params }: Props) => {
             setLoading(false)
         }
     }
-    const getItemPlus = async (g: string, s: string, sk: number, li: number) => {
-        const result = await NoUser.getItem({ genre: g, search: s, skip: sk + li, limit: li })
+    const getItemPlus = async (g: string, s: string, sk: number, li: number, sort: string) => {
+        const result = await NoUser.getItem({ genre: g, search: s, skip: sk + li, limit: li, sort: sort })
         setEnd(result.data?.length ? false : true)
     }
 
     const topage = useRouter()
 
     useEffect(() => {
-        getItem("news", search, page * limit, limit)
-        getItemPlus("news", search, page * limit, limit)
-    }, [search, page])
+        getItem("news", search, page * limit, limit, "editDate")
+        getItemPlus("news", search, page * limit, limit, "editDate")
+    }, [refresh, search, page])
 
     setTimeout(() => {
         setLoading(false)
     }, 2000)
 
     const toPage = useRouter()
+
+    const deleteItem = async (p: string, a: string, id: string) => {
+        const result = await UserAuthen.deleteItem(p, a, id)
+        if (result.success) {
+            setRefresh(n => n + 1)
+            store.dispatch(setNotice({ success: result.success, msg: "この固定ページが削除されました。", open: true }))
+            setTimeout(() => {
+                store.dispatch(setNotice({ success: false, msg: "", open: false }))
+            }, 3000)
+        }
+    }
     return (
-        loading ? <div className={`archive`}>loading...</div> :
+        loading ? <div className={`archive`}>loading..</div> :
+
             <div className={`archive`}>
                 <div className={`items ${currentTheme ? "light1" : "dark1"}`}>
                     <div className='title_items'>
@@ -88,13 +96,18 @@ const Page = ({ params }: Props) => {
 
                     {news.map((n: any, index: number) =>
                         <div key={index} className='item'>
-                            <DescriptionOutlinedIcon />
-                            <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
+                            <div style={{ display: "flex" }}>
+                                <DescriptionOutlinedIcon />
+                                <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
+                            </div>
+                            {n.editDate ?
+                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}><span style={{ fontSize: "50%", opacity: 0.75, color: "green" }}>最新編集 </span>{moment(n.editDate).format('YY/MM/DD')}</p> :
+                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{moment(n.createDate).format('YY/MM/DD')}</p>}
                             <div className="icons">
                                 <Link href={"/home/news/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
                                 <EditOutlinedIcon onClick={() => topage.push("/admin/news/" + n.slug)} />
-                                <ContentCopyIcon />
-                                <DeleteOutlineOutlinedIcon />
+                                <ContentCopyIcon onClick={() => topage.push("/admin/news/news/" + n.slug)} />
+                                <DeleteOutlineOutlinedIcon onClick={() => deleteItem(currentUser.position, "news", n._id)} />
                             </div>
                         </div>)}
                 </div>

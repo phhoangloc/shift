@@ -27,6 +27,10 @@ const staffSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    editDate: {
+        type: Date,
+        default: Date.now,
+    },
 })
 
 export const StaffModel = mongoose.models.staff || mongoose.model('staff', staffSchema)

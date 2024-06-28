@@ -19,7 +19,10 @@ export default async function handler(
                 .find(query.slug ? { "slug": query.slug } : {})
                 .find(query.category ? { "category": query.category } : {})
                 .find(query.search ? { "title": { $regex: query.search } } : {})
-                .sort({ "createDate": -1 })
+                .sort(query.sort === "title" ? { "title": -1 } : {})
+                .sort(query.sort === "createDate" ? { "createDate": -1 } : {})
+                .sort(query.sort === "editDate" ? { "editeDate": -1 } : {})
+                .sort({ "editDate": -1 })
                 .skip(query.skip)
                 .limit(query.limit ? query.limit : {})
                 .catch((error: Error) => {

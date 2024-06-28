@@ -47,6 +47,20 @@ export default async function handler(
                         res.json(result)
                     })
                 break
+            case "DELETE":
+                await NewModel
+                    .deleteOne({ "_id": query.id })
+                    .catch((error: Error) => {
+                        res.json(result)
+                        throw error.message
+                    })
+                    .then((data: any) => {
+                        result.success = true
+                        result.name = "ニュース"
+                        result.data = data
+                        res.json(result)
+                    })
+                break
         }
     } else {
         result.success = false

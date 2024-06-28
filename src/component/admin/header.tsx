@@ -29,11 +29,12 @@ const Header = (props: Props) => {
         update()
     })
 
+    console.log(currentUser?._id)
+
     return (
         <div className='header'>
             <IconToggle
                 className='iconSwitch'
-
                 icon1={<DarkModeIcon onClick={() => store.dispatch(setTheme(false))} />}
                 icon2={<LightModeIcon onClick={() => store.dispatch(setTheme(true))} />}
                 value={currentTheme} />
@@ -44,34 +45,20 @@ const Header = (props: Props) => {
                 value={currentMenu} />
 
             {currentUser?._id ?
-                <AccordionIcon
-                    icon={currentUser?.avata?.name ? <Image src={process.env.ftp_url + currentUser?.avata?.name} width={100} height={100} alt='avt' style={{ width: "25px", height: "25px" }} /> : null}
-                    data={[
-                        {
-                            name: "Profile",
-                            link: "/profile"
-                        },
-                        {
-                            name: "Log Out",
-                            func: () => { store.dispatch(setRefresh()), localStorage.clear() }
-                        }
-                    ]}
-                    top="5px"
-                    right='90px' /> :
-                <AccordionIcon
-                    icon={<PersonIcon style={{ width: "25px", height: "25px" }} />}
-                    data={[
-                        {
-                            name: "Log In",
-                            link: "/login"
-                        },
-                        {
-                            name: "Sign Up",
-                            link: "/signup"
-                        }
-                    ]}
-                    top="5px"
-                    right='90px' />
+                <div style={{ position: "absolute", right: "25px", width: "100px" }}>
+                    <p>{currentUser?.username}</p>
+                    <AccordionIcon
+                        icon={<PersonIcon style={{ width: "25px", height: "25px", padding: "7.5px" }} />}
+                        data={[
+                            {
+                                name: "ログアウト",
+                                func: () => localStorage.clear()
+                            }
+                        ]}
+                        top="5px"
+                        right='0px' />
+                </div>
+                : null
             }
             <Link href={"/"} target='_blank' ><h3>SHIFT</h3></Link>
 

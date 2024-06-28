@@ -13,6 +13,10 @@ import { UserAuthen } from '@/api/UserAuthen'
 import { setNotice } from '@/redux/reducer/noticeReducer'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Link from 'next/link'
+import SortIcon from '@mui/icons-material/Sort';
+import AccordionIcon from '@/component/tool/accordionIcon'
+import moment from 'moment'
+import Loading from '@/component/loading'
 const Page = () => {
 
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
@@ -30,24 +34,16 @@ const Page = () => {
 
     const [news, setNews] = useState<any[]>([])
     const [pageName, setPageName] = useState<string>("")
-    const [model, setModel] = useState<any[]>([])
 
     const [search, setSearch] = useState<string>("")
+    const [sort, setSort] = useState<string>("")
     const [page, setPage] = useState<number>(0)
     const [limit, setLimit] = useState<number>(10)
     const [end, setEnd] = useState<boolean>(true)
 
-    const getModel = async () => {
-        const result = await NoUser.getModel()
-        setModel(result)
-    }
 
-    useEffect(() => {
-        getModel()
-    }, [])
-
-    const getItem = async (g: string, s: string, sk: number, li: number) => {
-        const result = await NoUser.getItem({ genre: g, search: s, skip: sk, limit: li })
+    const getItem = async (g: string, s: string, sk: number, li: number, sort: string) => {
+        const result = await NoUser.getItem({ genre: g, search: s, skip: sk, limit: li, sort: sort })
         if (result.success) {
             setNews(result.data)
             setPageName(result.name)
@@ -58,17 +54,17 @@ const Page = () => {
             setLoading(false)
         }
     }
-    const getItemPlus = async (g: string, s: string, sk: number, li: number) => {
-        const result = await NoUser.getItem({ genre: g, search: s, skip: sk + li, limit: li })
+    const getItemPlus = async (g: string, s: string, sk: number, li: number, sort: string) => {
+        const result = await NoUser.getItem({ genre: g, search: s, skip: sk + li, limit: li, sort })
         setEnd(result.data?.length ? false : true)
     }
 
     const topage = useRouter()
 
     useEffect(() => {
-        getItem("fpage", search, page * limit, limit)
-        getItemPlus("fpage", search, page * limit, limit)
-    }, [refresh, search, page])
+        getItem("fpage", search, page * limit, limit, sort)
+        getItemPlus("fpage", search, page * limit, limit, sort)
+    }, [refresh, search, page, sort])
 
     const toPage = useRouter()
 
@@ -82,20 +78,42 @@ const Page = () => {
             }, 3000)
         }
     }
+
+    console.log(news)
     return (
         loading ? <div className={`archive`}>loading...</div> :
             <div className={`archive`}>
                 <div className={`items ${currentTheme ? "light1" : "dark1"}`}>
                     <div className='title_items'>
                         <h3>{pageName} <span onClick={() => toPage.push("/admin/fpage/news")}>{pageName && `新規の${pageName}`}</span></h3>
-                        <SearchBox placehoder='検索' func={(v) => setSearch(v)} />
+                        <SearchBox placehoder='検索' func={(v) => setSearch(v)} right='40px' />
+                        <AccordionIcon icon={<SortIcon />}
+                            data={[{
+                                name: "タイトル",
+                                func: () => setSort("title"),
+                            },
+                            {
+                                name: "日付",
+                                func: () => setSort("createDate"),
+                            },
+                            ]}
+                            top={"5px"}
+                            right={"10px"}
+                        />
+
                     </div>
+
                     {news.map((n: any, index: number) =>
                         <div key={index} className='item'>
-                            <DescriptionOutlinedIcon />
-                            <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
+                            <div style={{ display: "flex" }}>
+                                <DescriptionOutlinedIcon />
+                                <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
+                            </div>
+                            {n.editDate ?
+                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}><span style={{ fontSize: "50%", opacity: 0.75, color: "green" }}>最新編集 </span>{moment(n.editDate).format('YY/MM/DD')}</p> :
+                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{moment(n.createDate).format('YY/MM/DD')}</p>}
                             <div className="icons">
-                                <Link href={"/home/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
+                                <Link style={{ color: "inherit" }} href={"/home/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
                                 <EditOutlinedIcon onClick={() => topage.push("/admin/fpage/" + n.slug)} />
                                 <ContentCopyIcon onClick={() => topage.push("/admin/fpage/news/" + n.slug)} />
                                 <DeleteOutlineOutlinedIcon onClick={() => deleteItem(currentUser.position, "fpage", n._id)} />

@@ -3,19 +3,19 @@ import SearchIcon from '@mui/icons-material/Search';
 type Props = {
     placehoder: string,
     func: (v: string) => void,
-
+    right?: string
 }
 
-const SearchBox = ({ placehoder, func }: Props) => {
+const SearchBox = ({ placehoder, func, right }: Props) => {
 
     const inputRef = useRef<any>("")
     const boxStyle: React.CSSProperties = {
         display: "flex",
         height: "40px",
         position: "relative",
-        right: 0,
         fontSize: "1rem",
-        margin: "0 0 0 auto"
+        margin: "0 0 0 auto",
+        right: right || 0
     }
     const inputStyle: React.CSSProperties = { width: 0, margin: 0, padding: 0, border: 0, background: "inherit", transition: "all 0.25s", borderRadius: "5px" }
     const inputFocusStyle: React.CSSProperties = { width: "200px", border: "1px solid #aaa", padding: "0 5px" }

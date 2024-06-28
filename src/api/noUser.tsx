@@ -8,6 +8,7 @@ type Query = {
     skip?: number,
     limit?: number,
     pre?: string,
+    sort?: string,
 }
 const login = async (body: { username: string, password: string }) => {
     const result = await axios.post("/api/login", body)
@@ -26,8 +27,8 @@ const getModel = async () => {
     const result = await axios.get("/api/model")
     return result.data
 }
-const getItem = async ({ genre, slug, category, search, skip, limit, pre }: Query) => {
-    const result = await axios.get(`/api/${genre}?slug=${slug ? slug : ""}&&category=${category ? category : ""}&&search=${search ? search : ""}&&skip=${skip ? skip : 0}&&limit=${limit ? limit : ""}&&pre=${pre ? pre : genre}`)
+const getItem = async ({ genre, slug, category, search, skip, limit, pre, sort }: Query) => {
+    const result = await axios.get(`/api/${genre}?slug=${slug ? slug : ""}&&category=${category ? category : ""}&&search=${search ? search : ""}&&skip=${skip ? skip : 0}&&limit=${limit ? limit : ""}&&pre=${pre ? pre : genre}&&sort=${sort ? sort : ""}`)
     return result.data
 }
 const getPicById = async (id: string) => {

@@ -22,6 +22,10 @@ const newsSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    editDate: {
+        type: Date,
+        default: Date.now,
+    },
 })
 
 export const NewModel = mongoose.models.new || mongoose.model('new', newsSchema)

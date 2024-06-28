@@ -24,24 +24,25 @@ const AccordionIcon = ({ icon, data, top, right }: Props) => {
     })
 
     const [open, setOpen] = useState<boolean>(false)
+
     return (
         <div style={{ position: "absolute", top: top, right: right }}>
             <div className='grid_box' style={{ height: "40px", lineHeight: "40px" }}>
                 <div style={{ width: `40px)`, cursor: "pointer" }} onClick={() => setOpen(!open)}>{icon}</div>
             </div>
-            <div className={`${currentTheme ? "light1" : "dark1"} ` + 'transition-all-05s overflow-hidden box-shadow-2'}
-                style={{ position: 'absolute', top: "40px", right: 0, width: "max-content", zIndex: 1, borderRadius: "5px", padding: "2px", display: open ? "block" : "none" }}>
+            <div className={`${currentTheme ? "light1" : "dark1"} `}
+                style={{ position: 'absolute', top: "40px", right: 0, width: "max-content", zIndex: 1, borderRadius: "5px", padding: "2px", display: open ? "block" : "none", boxShadow: "0px 1px 5px -2px #888" }}>
                 {
                     data ? data.map((item: any, index: number) =>
                         item.link ?
                             <Link href={item.link} key={index}>
-                                <div className='hover-title' key={index}
+                                <div className='title_hover' key={index}
                                     style={{ height: "40px", lineHeight: "40px", fontSize: "0.9rem", padding: "0px 15px", cursor: "pointer", opacity: 0.75, borderRadius: "5px", fontWeight: "bold" }}>
                                     {item.name}
                                 </div>
                             </Link> :
-                            <div className='hover-title' key={index} onClick={() => { item?.func(), setOpen(false) }}
-                                style={{ height: "40px", lineHeight: "40px", fontSize: "0.9rem", padding: "0px 15px", cursor: "pointer", opacity: 0.75, borderRadius: "5px", fontWeight: "bold" }}>
+                            <div className='title_hover' key={index} onClick={() => { item?.func(), setOpen(false) }}
+                                style={{ height: "40px", lineHeight: "40px", fontWeight: "normal", fontSize: "0.9rem", padding: "0px 15px", cursor: "pointer", opacity: 0.75, borderRadius: "5px" }}>
                                 {item.name}
                             </div>
                     ) : null

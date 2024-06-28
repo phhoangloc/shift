@@ -10,6 +10,7 @@ import { UserAuthen } from '@/api/UserAuthen'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { setRefresh } from '@/redux/reducer/RefreshReduce'
+import moment from 'moment'
 type Props = {
     params: { archive: string, slug: string }
 }
@@ -50,21 +51,25 @@ const Page = ({ params }: Props) => {
         getMail()
     }, [])
 
-    const emailAdd = boxRef.current?.childNodes?.[1]?.childNodes?.[3]?.innerText?.split(":")?.[1]
+    const emailAdd = boxRef.current?.childNodes?.[1]?.childNodes?.[3]?.innerText?.split(":")?.[1] || mail?.email?.split("\"")[2]?.match(/<([^>]+)>/)[1]
 
     const [reply, setReply] = useState<boolean>(false)
     const [replyContent, setRelyContent] = useState<string>("")
 
     const sendMail = async (s: string, e: string, r: string, be: string) => {
-        const content = r + `<div style="border-left:1px solid;padding-left:5px;width:100%">${be}</div>`
+        const now = Date.now()
+        const content = r + `<div style="border-left:1px solid;padding-left:5px;width:100%">
+        ${moment(now).format("YYYY年MM月DD日 hh:mm")} from ${e}
+        ${be}
+        </div>`
 
         const body = {
-            title: s,
+            title: s.includes("<reply>") ? s : s + " <reply>",
             email: e,
             content,
         }
 
-        // console.log(body)
+
 
         const result = await UserAuthen.sendMail(currentUser.position, body)
         console.log(result)

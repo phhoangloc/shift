@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import store from '@/redux/store'
 import Pagination from '@/component/tool/pagination'
-import Input from '@/component/input/input'
 import { UserAuthen } from '@/api/UserAuthen'
 import moment from 'moment'
 import RefreshIcon from '@mui/icons-material/Refresh';
+import Loading from '@/component/loading'
 type Props = {
     params: { archive: string }
 }
@@ -33,7 +33,7 @@ const Page = ({ params }: Props) => {
     const [search, setSearch] = useState<string>("")
     const [page, setPage] = useState<number>(0)
     const [refresh, setRefresh] = useState<number>(0)
-    const [limit, setLimit] = useState<number>(20)
+    const [limit, setLimit] = useState<number>(50)
 
     const topage = useRouter()
 
@@ -64,16 +64,20 @@ const Page = ({ params }: Props) => {
                 <div className={`items ${currentTheme ? "light1" : "dark1"}`}>
                     <h3>{pageName} <RefreshIcon onClick={() => setRefresh(n => n + 1)} /></h3>
                     {/* <Input name="search" onChange={(v) => setSearch(v)} value={search} /> */}
-                    {mails.sort((a: any, b: any) => b.id - a.id).map((n: any, index: number) =>
-                        <div key={index}
-                            onClick={() => updateMail(n.id)}
-                            className='mail'>
-                            <h4>{n.email}<span>{moment(n.date).format('MM/DD HH:mm')}</span></h4>
-                            <p>{n.subject}</p>
-                        </div>
-                    )}
+                    {mails.sort((a: any, b: any) => b.id - a.id)
+                        .filter(n => n.email.includes("問い合わせ") || n.subject.includes("<reply>"))
+                        .map((n: any, index: number) =>
+                            <div key={index}
+                                onClick={() => updateMail(n.id)}
+                                className='mail'>
+                                <h4>
+                                    <span>{moment(n.date).format('MM月DD日 HH時mm')}</span><br></br>
+                                    {n.email}</h4>
+                                <p>{n.subject}</p>
+                            </div>
+                        )}
                 </div>
-                <Pagination page={page} next={() => setPage(p => p + 1)} prev={() => setPage(p => p - 1)} />
+                <Pagination page={page} next={() => setPage(p => p + 1)} prev={() => setPage(p => p - 1)} end={true} />
             </div>
     )
 }

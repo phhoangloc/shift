@@ -4,8 +4,6 @@ import NoUser from '@/api/noUser'
 import { useRouter } from 'next/navigation'
 import store from '@/redux/store'
 import Pagination from '@/component/tool/pagination'
-import Input from '@/component/input/input'
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
@@ -13,14 +11,18 @@ import PeopleIcon from '@mui/icons-material/People';
 import SearchBox from '@/component/input/searchBox'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Link from 'next/link'
+import moment from 'moment'
+import { UserAuthen } from '@/api/UserAuthen'
+import { setNotice } from '@/redux/reducer/noticeReducer'
+import Loading from '@/component/loading'
 const Page = () => {
 
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
-
+    const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
     const update = () => {
         store.subscribe(() => setCurrentTheme(store.getState().theme))
+        store.subscribe(() => setCurrentUser(store.getState().user))
     }
-
     useEffect(() => {
         update()
     })
@@ -64,8 +66,19 @@ const Page = () => {
     }, 2000)
 
     const toPage = useRouter()
+
+    const deleteItem = async (p: string, a: string, id: string) => {
+        const result = await UserAuthen.deleteItem(p, a, id)
+        if (result.success) {
+            toPage.push("/admin/staff")
+            store.dispatch(setNotice({ success: result.success, msg: "この固定ページが削除されました。", open: true }))
+            setTimeout(() => {
+                store.dispatch(setNotice({ success: false, msg: "", open: false }))
+            }, 3000)
+        }
+    }
     return (
-        loading ? <div className={`archive`}>loading...</div> :
+        loading ? <div className={`archive`}>loadding...</div> :
             <div className={`archive`}>
                 <div className={`items ${currentTheme ? "light1" : "dark1"}`}>
                     <div className='title_items'>
@@ -74,13 +87,18 @@ const Page = () => {
                     </div>
                     {news.map((n: any, index: number) =>
                         <div key={index} className='item'>
-                            <PeopleIcon />
-                            <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
+                            <div style={{ display: "flex" }}>
+
+                                <PeopleIcon />
+                                <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
+                            </div>
+                            {n.editDate ?
+                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}><span style={{ fontSize: "50%", opacity: 0.75, color: "green" }}>最新編集 </span>{moment(n.editDate).format('YY/MM/DD')}</p> :
+                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{moment(n.createDate).format('YY/MM/DD')}</p>}
                             <div className="icons">
                                 <Link href={"/home/staff/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
                                 <EditOutlinedIcon onClick={() => topage.push("/admin/staff/" + n.slug)} />
-                                <ContentCopyIcon />
-                                <DeleteOutlineOutlinedIcon />
+                                <DeleteOutlineOutlinedIcon onClick={() => deleteItem(currentUser.position, "staff", n._id)} />
                             </div>
                         </div>
                     )}

@@ -12,6 +12,7 @@ import UploadIcon from '@mui/icons-material/Upload';
 import Image from 'next/image'
 import ImageModal from '@/component/modal/imageModal'
 import Accordion from '@/component/tool/accordion'
+import { setNotice } from '@/redux/reducer/noticeReducer'
 type Props = {
     params: { slug: string }
 }
@@ -82,7 +83,7 @@ const Page = ({ params }: Props) => {
 
 
     const body = {
-        title, slug, position, cover, content: newContent || content
+        title, slug, position, cover, content: newContent || content, editDate: Date.now()
     }
 
     const updateNews = async (body: any, id: string) => {
@@ -95,12 +96,22 @@ const Page = ({ params }: Props) => {
     const createNews = async (body: any) => {
         const result = await UserAuthen.createItem(currentUser.position, "staff", body)
         if (result.success) {
-            toPage.push('/admin/staff/' + slug)
+            toPage.push('/admin/staff/')
         }
     }
 
     const toPage = useRouter()
 
+    const deleteItem = async (p: string, a: string, id: string) => {
+        const result = await UserAuthen.deleteItem(p, a, id)
+        if (result.success) {
+            toPage.push("/admin/staff")
+            store.dispatch(setNotice({ success: result.success, msg: "この固定ページが削除されました。", open: true }))
+            setTimeout(() => {
+                store.dispatch(setNotice({ success: false, msg: "", open: false }))
+            }, 3000)
+        }
+    }
     return (
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
@@ -155,8 +166,9 @@ const Page = ({ params }: Props) => {
                     </div>
                     <TextAreaTool onChange={(v) => setNewContent(v)} value={content} />
                     <div style={{ display: 'flex' }}>
-                        <Button name='戻る' onClick={() => toPage.back()} />
+                        <Button name='戻る' onClick={() => toPage.push('/admin/staff/')} />
                         {id ? <Button name='保存' onClick={() => updateNews(body, id)} /> : <Button name='作成' onClick={() => createNews(body)} />}
+                        {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => deleteItem(currentUser.position, "staff", id)} /> : null}
                     </div>
                 </div>
                 <ImageModal modalOpen={modalOpen} onCanel={() => setModalOpen(false)} onSubmit={(id) => { setModalOpen(false), setCover(id) }} />

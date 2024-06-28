@@ -21,7 +21,7 @@ export default async function handler(
             break
         case "POST":
             const mainOptions = {
-                from: '問い合わせ<no-reply>',
+                from: '問い合わせ<SHIFT>',
                 to: "h-loc@astem-co.co.jp",
                 subject: req.body.title,
                 html: `

@@ -76,9 +76,9 @@ export default async function handler(
                                         content: parsed.html || parsed.textAsHtml,
                                         date: parsed.date
                                     }
-                                    // data = [...data, item]
 
-                                    data = [...data.filter(d => d.subject !== item.subject && "Re:" + d.subject !== item.subject), item]
+                                    data = [...data, item]
+                                    // data = [...data.filter(d => d.subject !== item.subject && "Re:" + d.subject !== item.subject), item]
                                 });
                             });
 

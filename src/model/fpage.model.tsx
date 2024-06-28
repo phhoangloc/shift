@@ -19,6 +19,10 @@ const fpageSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    editDate: {
+        type: Date,
+        default: Date.now,
+    },
 })
 
 export const fpageModel = mongoose.models.fpage || mongoose.model('fpage', fpageSchema)

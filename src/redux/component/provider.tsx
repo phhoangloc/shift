@@ -7,6 +7,7 @@ import "../../style/theme.css"
 import NoticeModal from '@/component/modal/notice.modal'
 import ImageModal from '@/component/modal/imageModal'
 import NoUser from '@/api/noUser'
+import Loading from '@/component/loading'
 type Props = {
     children: React.ReactNode
 }
@@ -44,7 +45,7 @@ const Provider = ({ children }: Props) => {
     }, [currentRefresh])
 
     return (
-        loading ? <p>loading...</p> :
+        loading ? <div style={{ width: "100vw", height: "100vh" }}><Loading /></div> :
             <>
                 <NoticeModal />
                 <ImageModal />

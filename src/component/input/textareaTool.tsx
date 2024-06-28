@@ -171,10 +171,14 @@ const TextAreaTool = ({ onChange, value }: Props) => {
         color: "inherit",
     }
     const tool: React.CSSProperties = {
+        width: "calc(100% - 10px)",
+
         position: "sticky",
-        top: "5px",
+        top: "0px",
         display: "flex",
         flexWrap: "wrap",
+        borderRadius: "5px"
+
     }
 
     const button: React.CSSProperties = {
@@ -222,27 +226,29 @@ const TextAreaTool = ({ onChange, value }: Props) => {
 
     const inputBox: React.CSSProperties = {
         minHeight: "300px",
-        padding: "10px 5px",
+        padding: "20px",
         marginTop: "10px",
         borderRadius: "5px",
+        boxShadow: "0px 0px 5px  #888",
     }
     const inputBoxFocus: React.CSSProperties = {
-        boxShadow: "0px 0px 2px 0px #aaa",
     }
 
     const modalBox: React.CSSProperties = {
-        width: "100%",
+        width: "max-content",
         minHeight: "40px",
-        display: "none",
+        left: "5px",
+        opacity: 0,
         flexWrap: "wrap",
         overflow: "hidden",
-        margin: "5px 0",
-        transition: "all 0.25s",
+        marginTop: "5px",
         position: "absolute",
-        top: "0px",
+        transition: "all 0.25s",
+        zIndex: -1,
+        display: "flex"
     }
     const modalBoxFocus: React.CSSProperties = {
-        height: "max-content", marginTop: "50px", display: "flex"
+        opacity: 1, height: "max-content", marginTop: "45px",
     }
 
     const onSubmit = (t: string, vl: string, vr: string) => {
@@ -268,29 +274,30 @@ const TextAreaTool = ({ onChange, value }: Props) => {
                 <p style={button} onClick={() => { setFocusInput(!focusInput), setInputType("dl") }}>dl</p>
                 <p style={button} onClick={() => { setFocusInput(!focusInput), setInputType("link") }}>url</p>
                 <AddPhotoAlternateIcon style={icon} onClick={() => { setFocusInput(!focusInput), setInputType("img") }} />
+                <div style={focusInput ? { ...modalBox, ...modalBoxFocus } : modalBox}>
+                    <input
+                        ref={inputValueLeftRef}
+                        style={{ ...input }} placeholder={inputType === "dl" ? '定義' : inputType === "link" ? "url" : "価値"}
+                        onChange={(e) => setInputLeftValue(e.target.value)}
+                        value={inputLeftValue}
+                        onFocus={(e) => {
+                            e.target.style.outline = 'none'
+                        }}>
+                    </input>
+                    {inputType === "dl" && <input
+                        ref={inputValueRightRef}
+                        style={{ ...input }} placeholder={'価値'}
+                        onChange={(e) => setInputRightValue(e.target.value)}
+                        value={inputRightValue}
+                        onFocus={(e) => {
+                            e.target.style.outline = 'none'
+                        }}>
+                    </input>}
+                    <CloseIcon style={icon} onClick={() => { setFocusInput(false), setInputType("") }} />
+                    <CheckIcon style={icon} onClick={() => { onSubmit(inputType, inputLeftValue, inputRightValue), setFocusInput(false), setInputType("") }} />
+                </div>
             </div>
-            <div style={focusInput ? { ...modalBox, ...modalBoxFocus } : modalBox}>
-                <input
-                    ref={inputValueLeftRef}
-                    style={{ ...input }} placeholder={inputType === "dl" ? '定義' : inputType === "link" ? "url" : "価値"}
-                    onChange={(e) => setInputLeftValue(e.target.value)}
-                    value={inputLeftValue}
-                    onFocus={(e) => {
-                        e.target.style.outline = 'none'
-                    }}>
-                </input>
-                {inputType === "dl" && <input
-                    ref={inputValueRightRef}
-                    style={{ ...input }} placeholder={'価値'}
-                    onChange={(e) => setInputRightValue(e.target.value)}
-                    value={inputRightValue}
-                    onFocus={(e) => {
-                        e.target.style.outline = 'none'
-                    }}>
-                </input>}
-                <CloseIcon style={icon} onClick={() => { setFocusInput(false), setInputType("") }} />
-                <CheckIcon style={icon} onClick={() => { onSubmit(inputType, inputLeftValue, inputRightValue), setFocusInput(false), setInputType("") }} />
-            </div>
+
             <div className='editBox'
                 ref={inputRef}
                 style={focus || inputRef?.current?.innerHTML ? { ...inputBox, ...inputBoxFocus } : { ...inputBox }}

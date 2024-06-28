@@ -143,7 +143,7 @@
     background-color: inherit;
     box-shadow: none;
     padding: 0;
-    height: calc(100vh - 30px);
+    height: calc(100vh - 50px);
   }
   .admin .bodypage .menubackground .menu .iconClose {
     display: none;
@@ -212,6 +212,8 @@
   margin: 5px 0;
   border-bottom: 1px solid #aaa;
   display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .admin .archive .items .item svg {
@@ -224,7 +226,7 @@
 }
 
 .admin .archive .items .item h4 {
-  font-size: 125%;
+  font-size: 110%;
   line-height: 45px;
   height: 40px;
 }
@@ -235,11 +237,14 @@
 }
 
 .admin .archive .items .item p {
-  margin-left: 5px;
+  margin: auto 5px auto auto;
+  line-height: 40px;
+  font-size: 80%;
+  opacity: 0.8;
 }
 
 .admin .archive .items .item .icons {
-  margin: 0 0 0 auto;
+  width: max-content;
 }
 
 .admin .archive .items .item .icons svg {
@@ -253,25 +258,40 @@
   padding: 5px;
 }
 
+@media (max-width: 575px) {
+  .admin .archive .items .item p {
+    display: none;
+  }
+}
+
 .admin .archive .items .item:hover {
   background-color: rgba(211, 211, 211, 0.1);
 }
 
 .admin .archive .items .mail {
-  height: 50px;
   line-height: 25px;
   margin: 10px 0;
   padding: 10px;
+  border-bottom: 1px solid #aaa;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
 }
 
 .admin .archive .items .mail h4 {
   font-size: 1.1rem;
+  line-height: 1.25;
 }
 
 .admin .archive .items .mail h4 span {
-  font-size: 0.9rem;
-  opacity: 0.5;
-  margin-left: 10px;
+  font-size: 0.75rem;
+  opacity: 0.75;
+  margin-right: 10px;
+  font-weight: normal;
+}
+
+.admin .archive .items .mail p {
+  margin-top: 5px;
 }
 
 .admin .archive .items .mail p,
@@ -279,6 +299,14 @@
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
+}
+
+.admin .archive .items .mail:hover {
+  border: none;
+  transform: translateY(-2px);
+  box-shadow: 0px 2px 5px -3px black;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.025);
 }
 
 .admin .detail .item {
