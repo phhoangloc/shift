@@ -22,9 +22,9 @@ export default async function handler(
                 .find(query.pre ? { "genre": query.pre } : {})
                 .find(query.slug ? { "slug": query.slug } : {})
                 .find(query.search ? { "title": { $regex: query.search } } : {})
-                .sort(query.sort === "title" ? { "title": -1 } : {})
-                .sort(query.sort === "createDate" ? { "createDate": -1 } : {})
-                .sort({ "editDate": -1 })
+                // .sort({ "editDate": -1 })
+                .sort(query.sort === "editDate" ? { "editDate": -1 } : { "createDate": -1 })
+                // .sort(query.sort === "title" ? { "title": -1 } : {})
                 .skip(query.skip)
                 .limit(query.limit ? query.limit : {})
                 .catch((error: Error) => {

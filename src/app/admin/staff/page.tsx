@@ -88,13 +88,9 @@ const Page = () => {
                     {news.map((n: any, index: number) =>
                         <div key={index} className='item'>
                             <div style={{ display: "flex" }}>
-
                                 <PeopleIcon />
                                 <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
                             </div>
-                            {n.editDate ?
-                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}><span style={{ fontSize: "50%", opacity: 0.75, color: "green" }}>最新編集 </span>{moment(n.editDate).format('YY/MM/DD')}</p> :
-                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{moment(n.createDate).format('YY/MM/DD')}</p>}
                             <div className="icons">
                                 <Link href={"/home/staff/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
                                 <EditOutlinedIcon onClick={() => topage.push("/admin/staff/" + n.slug)} />

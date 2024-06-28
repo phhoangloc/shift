@@ -36,7 +36,7 @@ const Page = () => {
     const [pageName, setPageName] = useState<string>("")
 
     const [search, setSearch] = useState<string>("")
-    const [sort, setSort] = useState<string>("")
+    const [sort, setSort] = useState<string>("editDate")
     const [page, setPage] = useState<number>(0)
     const [limit, setLimit] = useState<number>(10)
     const [end, setEnd] = useState<boolean>(true)
@@ -94,7 +94,7 @@ const Page = () => {
                             },
                             {
                                 name: "日付",
-                                func: () => setSort("createDate"),
+                                func: () => setSort(""),
                             },
                             ]}
                             top={"5px"}

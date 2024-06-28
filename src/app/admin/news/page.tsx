@@ -64,8 +64,8 @@ const Page = ({ params }: Props) => {
     const topage = useRouter()
 
     useEffect(() => {
-        getItem("news", search, page * limit, limit, "editDate")
-        getItemPlus("news", search, page * limit, limit, "editDate")
+        getItem("news", search, page * limit, limit, "createDate")
+        getItemPlus("news", search, page * limit, limit, "createDate")
     }, [refresh, search, page])
 
     setTimeout(() => {
@@ -100,9 +100,7 @@ const Page = ({ params }: Props) => {
                                 <DescriptionOutlinedIcon />
                                 <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
                             </div>
-                            {n.editDate ?
-                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}><span style={{ fontSize: "50%", opacity: 0.75, color: "green" }}>最新編集 </span>{moment(n.editDate).format('YY/MM/DD')}</p> :
-                                <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{moment(n.createDate).format('YY/MM/DD')}</p>}
+                            <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{moment(n.createDate).format('YY/MM/DD')}</p>
                             <div className="icons">
                                 <Link href={"/home/news/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
                                 <EditOutlinedIcon onClick={() => topage.push("/admin/news/" + n.slug)} />
