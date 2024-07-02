@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { setMenu } from '@/redux/reducer/MenuReduce'
 import Link from 'next/link'
+import LogoutIcon from '@mui/icons-material/Logout';
 type Props = {}
 
 const Header = (props: Props) => {
@@ -45,12 +46,13 @@ const Header = (props: Props) => {
                 value={currentMenu} />
 
             {currentUser?._id ?
-                <div style={{ position: "absolute", right: "25px", width: "100px" }}>
-                    <p>{currentUser?.username}</p>
+                <div style={{ position: "absolute", right: "25px", display: "flex" }}>
+                    <p style={{ marginRight: "35px" }}>{currentUser?.username}</p>
                     <AccordionIcon
                         icon={<PersonIcon style={{ width: "25px", height: "25px", padding: "7.5px" }} />}
                         data={[
                             {
+                                icon: <LogoutIcon style={{ width: "25px", height: "25px", padding: " 5px" }} />,
                                 name: "ログアウト",
                                 func: () => localStorage.clear()
                             }

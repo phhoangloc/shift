@@ -4,7 +4,6 @@ import NoUser from '@/api/noUser'
 import { useRouter } from 'next/navigation'
 import store from '@/redux/store'
 import Pagination from '@/component/tool/pagination'
-import Input from '@/component/input/input'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -15,7 +14,6 @@ import Link from 'next/link'
 import moment from 'moment'
 import { UserAuthen } from '@/api/UserAuthen'
 import { setNotice } from '@/redux/reducer/noticeReducer'
-import Loading from '@/component/loading'
 type Props = {
     params: { archive: string }
 }

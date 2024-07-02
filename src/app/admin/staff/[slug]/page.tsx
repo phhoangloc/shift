@@ -89,7 +89,7 @@ const Page = ({ params }: Props) => {
     const updateNews = async (body: any, id: string) => {
         const result = await UserAuthen.editItem(currentUser.position, "staff", body, id)
         if (result.success) {
-            toPage.push('/admin/staff/' + slug)
+            toPage.push('/admin/staff/')
         }
     }
 

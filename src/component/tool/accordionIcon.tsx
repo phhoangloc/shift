@@ -42,7 +42,8 @@ const AccordionIcon = ({ icon, data, top, right }: Props) => {
                                 </div>
                             </Link> :
                             <div className='title_hover' key={index} onClick={() => { item?.func(), setOpen(false) }}
-                                style={{ height: "40px", lineHeight: "40px", fontWeight: "normal", fontSize: "0.9rem", padding: "0px 15px", cursor: "pointer", opacity: 0.75, borderRadius: "5px" }}>
+                                style={{ display: "flex", height: "40px", lineHeight: "40px", fontWeight: "normal", fontSize: "0.9rem", padding: "0px 15px", cursor: "pointer", opacity: 0.75, borderRadius: "5px" }}>
+                                {item.icon ? item.icon : null}
                                 {item.name}
                             </div>
                     ) : null
