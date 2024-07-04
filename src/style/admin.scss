@@ -224,6 +224,7 @@
                 display: flex;
                 justify-content: space-between;
                 flex-wrap: wrap;
+                cursor: pointer;
 
                 svg {
                     width: 30px;
@@ -245,6 +246,11 @@
                         font-weight: normal;
                         padding-left: 10px;
                     }
+                }
+
+                h4:hover {
+                    color: var(--main);
+                    text-decoration: underline;
                 }
 
                 p {
@@ -275,10 +281,6 @@
                     }
 
                 }
-            }
-
-            .item:hover {
-                background-color: rgba($color: lightgrey, $alpha: 0.1);
             }
 
             .mail {

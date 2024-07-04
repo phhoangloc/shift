@@ -214,6 +214,7 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  cursor: pointer;
 }
 
 .admin .archive .items .item svg {
@@ -234,6 +235,11 @@
 .admin .archive .items .item h4 span {
   font-weight: normal;
   padding-left: 10px;
+}
+
+.admin .archive .items .item h4:hover {
+  color: var(--main);
+  text-decoration: underline;
 }
 
 .admin .archive .items .item p {
@@ -262,10 +268,6 @@
   .admin .archive .items .item p {
     display: none;
   }
-}
-
-.admin .archive .items .item:hover {
-  background-color: rgba(211, 211, 211, 0.1);
 }
 
 .admin .archive .items .mail {

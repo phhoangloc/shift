@@ -17,13 +17,16 @@ import SortIcon from '@mui/icons-material/Sort';
 import AccordionIcon from '@/component/tool/accordionIcon'
 import moment from 'moment'
 import Loading from '@/component/loading'
+import { AlertType, setAlert } from '@/redux/reducer/alertReducer'
 const Page = () => {
 
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
     const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
+    const [currentAlert, setCurrentAlert] = useState<AlertType>(store.getState().alert)
     const update = () => {
         store.subscribe(() => setCurrentTheme(store.getState().theme))
         store.subscribe(() => setCurrentUser(store.getState().user))
+        store.subscribe(() => setCurrentAlert(store.getState().alert))
     }
     useEffect(() => {
         update()
@@ -34,6 +37,7 @@ const Page = () => {
 
     const [news, setNews] = useState<any[]>([])
     const [pageName, setPageName] = useState<string>("")
+    const [itemId, setItemId] = useState<string>("")
 
     const [search, setSearch] = useState<string>("")
     const [sort, setSort] = useState<string>("editDate")
@@ -79,7 +83,10 @@ const Page = () => {
         }
     }
 
-    console.log(news)
+    useEffect(() => {
+        currentAlert.value === true && itemId && deleteItem(currentUser.position, "fpage", itemId)
+    }, [currentAlert.value])
+
     return (
         loading ? <div className={`archive`}>loading...</div> :
             <div className={`archive`}>
@@ -107,16 +114,17 @@ const Page = () => {
                         <div key={index} className='item'>
                             <div style={{ display: "flex" }}>
                                 <DescriptionOutlinedIcon />
-                                <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
+                                <h4 onClick={() => topage.push("/admin/fpage/" + n.slug)}
+                                    style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}
+                                >{n.title}</h4>
                             </div>
                             {n.editDate ?
                                 <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}><span style={{ fontSize: "50%", opacity: 0.75, color: "green" }}>最新編集 </span>{moment(n.editDate).format('YY/MM/DD')}</p> :
                                 <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{moment(n.createDate).format('YY/MM/DD')}</p>}
                             <div className="icons">
                                 <Link style={{ color: "inherit" }} href={"/home/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
-                                <EditOutlinedIcon onClick={() => topage.push("/admin/fpage/" + n.slug)} />
-                                <ContentCopyIcon onClick={() => topage.push("/admin/fpage/news/" + n.slug)} />
-                                <DeleteOutlineOutlinedIcon onClick={() => deleteItem(currentUser.position, "fpage", n._id)} />
+                                {/* <ContentCopyIcon onClick={() => topage.push("/admin/fpage/news/" + n.slug)} /> */}
+                                <DeleteOutlineOutlinedIcon onClick={() => { setItemId(n._id), store.dispatch(setAlert({ value: false, msg: "このページを削除したいですか？", open: true })) }} />
                             </div>
                         </div>)}
                 </div>

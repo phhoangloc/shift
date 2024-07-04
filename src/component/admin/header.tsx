@@ -30,8 +30,6 @@ const Header = (props: Props) => {
         update()
     })
 
-    console.log(currentUser?._id)
-
     return (
         <div className='header'>
             <IconToggle

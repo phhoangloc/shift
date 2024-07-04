@@ -14,6 +14,8 @@ import Link from 'next/link'
 import moment from 'moment'
 import { UserAuthen } from '@/api/UserAuthen'
 import { setNotice } from '@/redux/reducer/noticeReducer'
+import { AlertType } from '@/redux/reducer/alertReducer'
+import { setAlert } from '@/redux/reducer/alertReducer'
 type Props = {
     params: { archive: string }
 }
@@ -22,9 +24,12 @@ const Page = ({ params }: Props) => {
 
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
     const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
+    const [currentAlert, setCurrentAlert] = useState<AlertType>(store.getState().alert)
+
     const update = () => {
         store.subscribe(() => setCurrentTheme(store.getState().theme))
         store.subscribe(() => setCurrentUser(store.getState().user))
+        store.subscribe(() => setCurrentAlert(store.getState().alert))
     }
     useEffect(() => {
         update()
@@ -35,6 +40,7 @@ const Page = ({ params }: Props) => {
 
     const [news, setNews] = useState<any[]>([])
     const [pageName, setPageName] = useState<string>("")
+    const [itemId, setItemId] = useState<string>("")
 
     const [search, setSearch] = useState<string>("")
     const [page, setPage] = useState<number>(0)
@@ -76,12 +82,15 @@ const Page = ({ params }: Props) => {
         const result = await UserAuthen.deleteItem(p, a, id)
         if (result.success) {
             setRefresh(n => n + 1)
-            store.dispatch(setNotice({ success: result.success, msg: "この固定ページが削除されました。", open: true }))
+            store.dispatch(setNotice({ success: result.success, msg: "このニュースページが削除されました。", open: true }))
             setTimeout(() => {
                 store.dispatch(setNotice({ success: false, msg: "", open: false }))
             }, 3000)
         }
     }
+    useEffect(() => {
+        currentAlert.value === true && itemId && deleteItem(currentUser.position, "news", itemId)
+    }, [currentAlert.value])
     return (
         loading ? <div className={`archive`}>loading..</div> :
 
@@ -94,16 +103,17 @@ const Page = ({ params }: Props) => {
 
                     {news.map((n: any, index: number) =>
                         <div key={index} className='item'>
-                            <div style={{ display: "flex" }}>
+                            <div style={{ display: "flex" }} onClick={() => topage.push("/admin/news/" + n.slug)}>
                                 <DescriptionOutlinedIcon />
-                                <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{n.title}</h4>
+                                <h4 style={{ fontWeight: n.resend ? "normal" : n.read ? "normal" : "bold", overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}
+                                >{n.title}</h4>
                             </div>
                             <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{moment(n.createDate).format('YY/MM/DD')}</p>
                             <div className="icons">
                                 <Link href={"/home/news/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
-                                <EditOutlinedIcon onClick={() => topage.push("/admin/news/" + n.slug)} />
-                                <ContentCopyIcon onClick={() => topage.push("/admin/news/news/" + n.slug)} />
-                                <DeleteOutlineOutlinedIcon onClick={() => deleteItem(currentUser.position, "news", n._id)} />
+                                {/* <EditOutlinedIcon onClick={() => topage.push("/admin/news/" + n.slug)} /> */}
+                                {/* <ContentCopyIcon onClick={() => topage.push("/admin/news/news/" + n.slug)} /> */}
+                                <DeleteOutlineOutlinedIcon onClick={() => { setItemId(n._id); store.dispatch(setAlert({ value: false, msg: "このニュースページを削除したいですか？", open: true })) }} />
                             </div>
                         </div>)}
                 </div>

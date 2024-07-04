@@ -56,7 +56,7 @@ export default async function handler(
                     })
                     .then((data: any) => {
                         result.success = true
-                        result.name = "ニュース"
+                        result.name = "スタッフ"
                         result.data = data
                         res.json(result)
                     })

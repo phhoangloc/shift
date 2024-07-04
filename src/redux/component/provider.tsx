@@ -8,6 +8,7 @@ import NoticeModal from '@/component/modal/notice.modal'
 import ImageModal from '@/component/modal/imageModal'
 import NoUser from '@/api/noUser'
 import Loading from '@/component/loading'
+import DecideModal from '@/component/modal/decide.modal'
 type Props = {
     children: React.ReactNode
 }
@@ -49,6 +50,7 @@ const Provider = ({ children }: Props) => {
             <>
                 <NoticeModal />
                 <ImageModal />
+                <DecideModal />
                 {children}
             </>
     )

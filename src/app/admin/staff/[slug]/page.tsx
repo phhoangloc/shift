@@ -13,6 +13,7 @@ import Image from 'next/image'
 import ImageModal from '@/component/modal/imageModal'
 import Accordion from '@/component/tool/accordion'
 import { setNotice } from '@/redux/reducer/noticeReducer'
+import { AlertType, setAlert } from '@/redux/reducer/alertReducer'
 type Props = {
     params: { slug: string }
 }
@@ -20,12 +21,12 @@ type Props = {
 const Page = ({ params }: Props) => {
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
     const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
-
+    const [currentAlert, setCurrentAlert] = useState<AlertType>(store.getState().alert)
     const update = () => {
         store.subscribe(() => setCurrentTheme(store.getState().theme))
         store.subscribe(() => setCurrentUser(store.getState().user))
+        store.subscribe(() => setCurrentAlert(store.getState().alert))
     }
-
     useEffect(() => {
         update()
     })
@@ -106,12 +107,16 @@ const Page = ({ params }: Props) => {
         const result = await UserAuthen.deleteItem(p, a, id)
         if (result.success) {
             toPage.push("/admin/staff")
-            store.dispatch(setNotice({ success: result.success, msg: "この固定ページが削除されました。", open: true }))
+            store.dispatch(setNotice({ success: result.success, msg: "このスタッフのページが削除されました。", open: true }))
             setTimeout(() => {
                 store.dispatch(setNotice({ success: false, msg: "", open: false }))
             }, 3000)
         }
     }
+    useEffect(() => {
+        currentAlert.value === true && id && deleteItem(currentUser.position, "staff", id)
+    }, [currentAlert.value])
+
     return (
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
@@ -128,7 +133,7 @@ const Page = ({ params }: Props) => {
                     </div>
                 </div>
                 <div className={`item ${currentTheme ? "light1" : "dark1"}`}>
-                    <div className='edittitle'><h3>この{modelName}の編集 <span onClick={() => toPage.push("/admin/staff/news")}>{modelName && `新規の${modelName}`}</span></h3></div>
+                    <div className='edittitle'><h3>この{modelName}の編集</h3></div>
                     <Input name="名前" onChange={(v) => setTitle(v)} value={title} />
                     <Input name="スラグ" onChange={(v) => setSlug(v)} value={slug} />
                     <Accordion title={position ? position : "職種"}
@@ -168,7 +173,7 @@ const Page = ({ params }: Props) => {
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.push('/admin/staff/')} />
                         {id ? <Button name='保存' onClick={() => updateNews(body, id)} /> : <Button name='作成' onClick={() => createNews(body)} />}
-                        {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => deleteItem(currentUser.position, "staff", id)} /> : null}
+                        {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => store.dispatch(setAlert({ value: false, open: true, msg: "このスタッフのページを削除したいですか？" }))} /> : null}
                     </div>
                 </div>
                 <ImageModal modalOpen={modalOpen} onCanel={() => setModalOpen(false)} onSubmit={(id) => { setModalOpen(false), setCover(id) }} />

@@ -9,6 +9,8 @@ import { UserAuthen } from '@/api/UserAuthen'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { setNotice } from '@/redux/reducer/noticeReducer'
+import { AlertType } from '@/redux/reducer/alertReducer'
+import { setAlert } from '@/redux/reducer/alertReducer'
 type Props = {
     params: { slug: string }
 }
@@ -17,10 +19,12 @@ const Page = ({ params }: Props) => {
 
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
     const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
+    const [currentAlert, setCurrentAlert] = useState<AlertType>(store.getState().alert)
 
     const update = () => {
         store.subscribe(() => setCurrentTheme(store.getState().theme))
         store.subscribe(() => setCurrentUser(store.getState().user))
+        store.subscribe(() => setCurrentAlert(store.getState().alert))
     }
 
     useEffect(() => {
@@ -30,7 +34,7 @@ const Page = ({ params }: Props) => {
     const [loading, setLoading] = useState<boolean>(false)
     const [savable, setSavable] = useState<boolean>(false)
     const [title, setTitle] = useState<string>("")
-    const [modelName, setModelName] = useState<string>("")
+
     const [id, setId] = useState<string>("")
     const [slug, setSlug] = useState<string>("")
     const [content, setContent] = useState<string>("")
@@ -39,15 +43,12 @@ const Page = ({ params }: Props) => {
     const getItem = async (g: string, s: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s })
         if (result.success && result.data[0]?._id) {
-            setModelName(result.name)
             setId(result.data[0]._id)
             setTitle(result.data[0].title)
             setSlug(result.data[0].slug)
             setContent(result.data[0].content)
             setLoading(false)
-
         } else {
-            setModelName("")
             setId("")
             setTitle("")
             setSlug("")
@@ -90,6 +91,11 @@ const Page = ({ params }: Props) => {
             }, 3000)
         }
     }
+
+    useEffect(() => {
+        currentAlert.value === true && id && deleteItem(currentUser.position, "fpage", id)
+    }, [currentAlert.value])
+
     return (
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
@@ -106,14 +112,14 @@ const Page = ({ params }: Props) => {
                     </div>
                 </div>
                 <div className={`item ${currentTheme ? "light1" : "dark1"}`}>
-                    <div className='edittitle'><h3>このページの編集 <span onClick={() => toPage.push("/admin/fpage/news")}>{modelName && `新規の${modelName}`}</span></h3></div>
+                    <div className='edittitle'><h3>このページの編集 </h3></div>
                     <Input name="タイトル" onChange={(v) => { setSavable(true), setTitle(v) }} value={title} />
                     <Input name="スラグ" onChange={(v) => { setSavable(true), setSlug(v) }} value={slug} />
                     <TextAreaTool onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} />
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.push('/admin/fpage/')} />
                         {params.slug[0] === "news" ? <Button name='作成' onClick={() => createNews(body)} /> : <Button name='保存' onClick={() => updateNews(body, id)} disable={!savable} />}
-                        {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => deleteItem(currentUser.position, "fpage", id)} /> : null}
+                        {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => store.dispatch(setAlert({ value: false, msg: "このページを削除したいですか？", open: true }))} /> : null}
                     </div>
                 </div>
             </div>
