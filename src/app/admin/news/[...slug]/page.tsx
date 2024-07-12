@@ -143,7 +143,7 @@ const Page = ({ params }: Props) => {
                     <TextAreaTool onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} />
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.push('/admin/news/')} />
-                        {params.slug[0] === "news" ? <Button name='作成' onClick={() => createNews(body)} /> : <Button name='保存' onClick={() => updateNews(body, id)} disable={!savable} />}
+                        {params.slug[0] === "news" ? <Button name='作成' onClick={() => createNews(body)} disable={!savable} /> : <Button name='保存' onClick={() => updateNews(body, id)} disable={!savable} />}
                         {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => store.dispatch(setAlert({ value: false, msg: "このニュースページを削除したいですか？", open: true }))} /> : null}
 
                         {/* {id ? <Button name='保存' onClick={() => updateNews(body, id)} /> : <Button name='作成' onClick={() => createNews(body)} />} */}

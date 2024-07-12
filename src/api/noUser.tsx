@@ -32,7 +32,7 @@ const getItem = async ({ genre, slug, category, search, skip, limit, pre, sort }
     return result.data
 }
 const getPicById = async (id: string) => {
-    const result = await axios.get(`api/pic?id=${id}`)
+    const result = await axios.get(`/api/pic?id=${id}`)
     return result.data
 }
 const createMail = async (body: any) => {

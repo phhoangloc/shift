@@ -1,9 +1,7 @@
 'use client'
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
 import FeedIcon from '@mui/icons-material/Feed';
-import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EmailIcon from '@mui/icons-material/Email';
@@ -12,6 +10,7 @@ import store from '@/redux/store';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PeopleIcon from '@mui/icons-material/People';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 type Props = {}
 
 const Menu = (props: Props) => {
@@ -55,6 +54,11 @@ const Menu = (props: Props) => {
             icon: <EmailIcon />,
             name: "問い合わせ",
             link: "/mails"
+        },
+        {
+            icon: <InsertPhotoIcon />,
+            name: "メディア",
+            link: "/media"
         },
     ]
 

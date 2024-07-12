@@ -6,6 +6,21 @@ div {
     box-sizing: border-box;
 }
 
+.bg-drop {
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(2px);
+    color: white;
+}
+
+.svg30px {
+    width: 30px !important;
+    height: 30px !important;
+    box-sizing: border-box;
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+
 .title_hover:hover {
     background-color: var(--main);
     color: white;
@@ -14,6 +29,12 @@ div {
 .link_hover:hover {
     color: var(--main);
     font-weight: bold !important;
+}
+
+.svg_hover:hover {
+    background-color: var(--main);
+    color: white;
+    border-radius: 25%;
 }
 
 .box_hover:hover {

@@ -22,7 +22,7 @@ const NoticeModal = () => {
     justifyContent: "center",
     textAlign: "center",
     backdropFilter: "blur(1px) brightness(0.9)",
-    zIndex: 2,
+    zIndex: 3,
     transform: "scale(0)"
   }
 

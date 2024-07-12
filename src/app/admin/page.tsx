@@ -105,7 +105,7 @@ const Page = (props: Props) => {
                                         <span style={{ fontWeight: "normal" }}>from </span>
                                         {n.email}
                                     </h4>
-                                    <p style={{ fontSize: "0.75rem", opacity: 0.75 }} >{moment(n.createDate).format('YY/MM/DD')}</p>
+                                    <p style={{ fontSize: "0.75rem", opacity: 0.75 }} >{moment(n.date).format('YY/MM/DD')}</p>
                                 </div>
                             )}
                     </div>
