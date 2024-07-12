@@ -14,22 +14,38 @@ import CloseIcon from '@mui/icons-material/Close';
 import { setMenu } from '@/redux/reducer/MenuReduce'
 import Link from 'next/link'
 import LogoutIcon from '@mui/icons-material/Logout';
+import { setAlert } from '@/redux/reducer/alertReducer'
 type Props = {}
 
 const Header = (props: Props) => {
     const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
     const [currentTheme, setCurrentTheme] = useState<any>(store.getState().theme)
     const [currentMenu, setCurrentMenu] = useState<any>(store.getState().menu)
+    const [currentAlert, setCurrentAlert] = useState<any>(store.getState().alert)
     const update = () => {
         store.subscribe(() => setCurrentUser(store.getState().user))
         store.subscribe(() => setCurrentTheme(store.getState().theme))
         store.subscribe(() => setCurrentMenu(store.getState().menu))
+        store.subscribe(() => setCurrentAlert(store.getState().alert))
 
     }
     useEffect(() => {
         update()
     })
 
+    const [isLogout, setIsLogout] = useState<boolean>(false)
+    useEffect(() => {
+        const logOut = (v: boolean, is: boolean) => {
+            localStorage.clear()
+            setIsLogout(false)
+            store.dispatch(setAlert({ open: false, msg: "", value: false }))
+            store.dispatch(setRefresh())
+        }
+
+        currentAlert.value && isLogout && logOut(currentAlert.value, isLogout)
+        currentAlert.value === false && currentAlert.open === false && setIsLogout(false)
+
+    }, [currentAlert.value, currentAlert.open, isLogout])
     return (
         <div className='header'>
             <IconToggle
@@ -52,7 +68,7 @@ const Header = (props: Props) => {
                             {
                                 icon: <LogoutIcon style={{ width: "25px", height: "25px", padding: " 5px" }} />,
                                 name: "ログアウト",
-                                func: () => localStorage.clear()
+                                func: () => { setIsLogout(true); store.dispatch(setAlert({ open: true, msg: "本当にログアウトしますか?", value: false })) }
                             }
                         ]}
                         top="5px"

@@ -46,7 +46,6 @@ const ImageModal = ({ modalOpen, onCanel, onSubmit }: Props) => {
     const [data, setData] = useState<any[]>([])
     const getMedia = async (genre: string, slug: string, search: string, skip: number | undefined, limit: number | undefined) => {
         const result = await NoUser.getItem({ genre, slug, category: "", search, skip, limit, pre: "" })
-        console.log(result)
         if (result.success) {
             setData(result.data)
         } else {
