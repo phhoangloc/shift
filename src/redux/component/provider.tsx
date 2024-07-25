@@ -30,6 +30,7 @@ const Provider = ({ children }: Props) => {
     const [loading, setLoading] = useState<boolean>(true)
     const checkLogin = async () => {
         setLoading(true)
+        await NoUser.getItem({ genre: "category" })
         await NoUser.getItem({ genre: "pic" })
         const result = await UserAuthen.checkLogin()
         if (result.success) {
