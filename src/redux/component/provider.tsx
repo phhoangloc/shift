@@ -30,8 +30,6 @@ const Provider = ({ children }: Props) => {
     const [loading, setLoading] = useState<boolean>(true)
     const checkLogin = async () => {
         setLoading(true)
-        await NoUser.getItem({ genre: "category" })
-        await NoUser.getItem({ genre: "pic" })
         const result = await UserAuthen.checkLogin()
         if (result.success) {
             store.dispatch(setUser(result.data))
@@ -46,6 +44,10 @@ const Provider = ({ children }: Props) => {
         checkLogin()
     }, [currentRefresh])
 
+    useEffect(() => {
+        NoUser.getItem({ genre: "category" })
+        NoUser.getItem({ genre: "pic" })
+    }, [])
     return (
         loading ? <div style={{ width: "100vw", height: "100vh" }}><Loading /></div> :
             <>
