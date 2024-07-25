@@ -1,7 +1,6 @@
 
 GET https://localhost:3000/api/news
 Content-Type: application/json
-Authorization: "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NWVkY2ZlODU4MGE2ZWY1MmE5NjE2OCIsImlhdCI6MTcyMTg3MzMwMiwiZXhwIjoxNzIxOTU5NzAyfQ.mO4kG94WspB8DMu4M96KyxtwZu8okwMEoacTr2lh9Ko
 
 ###
 POST https://localhost:3000/api/user
@@ -19,3 +18,6 @@ Content-Type: application/json
     "username":"locpham",
     "password":"123456"
 }
+
+###
+get https://shift-xi.vercel.app/api/news

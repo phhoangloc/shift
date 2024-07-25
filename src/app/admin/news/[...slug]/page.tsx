@@ -56,13 +56,12 @@ const Page = ({ params }: Props) => {
 
     const getItem = async (g: string, s: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s })
-        console.log(result)
         if (result.success && result.data[0]?._id) {
             setModelName(result.name)
             setId(result.data[0]._id)
             params.slug[1] ? setTitle(result.data[0].title + "コピー") : setTitle(result.data[0].title)
             params.slug[1] ? setSlug(result.data[0].slug + "_copy") : setSlug(result.data[0].slug)
-            setCategory(result.data[0].category)
+            setCategory(result.data[0].category.map((c: any) => c._id))
             setContent(result.data[0].content)
             setLoading(false)
 
@@ -85,7 +84,6 @@ const Page = ({ params }: Props) => {
     }
 
     const updateNews = async (body: any, id: string) => {
-
         const result = await UserAuthen.editItem(currentUser.position, "news", body, id)
         if (result.success) {
             toPage.push('/admin/news/')
@@ -137,7 +135,7 @@ const Page = ({ params }: Props) => {
     useEffect(() => {
         getCategory()
     }, [])
-    console.log(category)
+
     return (
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
@@ -164,7 +162,7 @@ const Page = ({ params }: Props) => {
                             {categoryArray.length ?
                                 categoryArray.map((item: any, index: number) =>
                                     <p onClick={() => setCategory(cates => cates && cates.includes(item._id) ? cates.filter(c => c.toString() != item._id.toString()) : [...cates, item._id])} key={index}
-                                        style={{ margin: "5px", padding: "5px", borderRadius: "5px", background: category && category?.includes(item._id) ? "#006699" : "inherit", color: category && category.includes(item._id) ? "white" : "inherit", cursor: "pointer" }}>
+                                        style={{ margin: "5px", padding: "5px", borderRadius: "5px", background: category && category.includes(item._id || { _id: item._id }) ? "#006699" : "inherit", color: category && category.toString().includes(item._id) ? "white" : "inherit", cursor: "pointer" }}>
                                         {item.name}</p>) :
                                 <p>カテゴリーがない</p>}
                         </div>
