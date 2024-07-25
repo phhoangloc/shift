@@ -12,6 +12,12 @@ import { useRouter } from 'next/navigation'
 import { setNotice } from '@/redux/reducer/noticeReducer'
 import { AlertType } from '@/redux/reducer/alertReducer'
 import { setAlert } from '@/redux/reducer/alertReducer'
+import moment from 'moment'
+import TextAreaTool_v2 from '@/component/input/textareaTool_v2'
+import ImageModal from '@/component/modal/imageModal'
+
+
+
 type Props = {
     params: { slug: string }
 }
@@ -31,17 +37,21 @@ const Page = ({ params }: Props) => {
         update()
     })
 
+    const [modalOpen, setModalOpen] = useState<boolean>(false)
+
     const [loading, setLoading] = useState<boolean>(false)
     const [savable, setSavable] = useState<boolean>(false)
 
     const [title, setTitle] = useState<string>("")
     const [modelName, setModelName] = useState<string>("")
     const [id, setId] = useState<string>("")
-    const [slug, setSlug] = useState<string>("")
+    const [slug, setSlug] = useState<string>(params.slug[0] + "_" + moment(new Date).format("YYYY_MM_DD_HH_mm"))
     const [category, setCategory] = useState<string>("")
-    const [content, setContent] = useState<string>("")
-    const [newContent, setNewContent] = useState<string>("")
+    const [content, setContent] = useState<any>("")
+    const [newContent, setNewContent] = useState<any>("")
 
+    const [pics, setPics] = useState<string[]>([])
+    const [idPic, setidPic] = useState<string>("")
 
     const getItem = async (g: string, s: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s })
@@ -58,13 +68,11 @@ const Page = ({ params }: Props) => {
             setModelName("")
             setId("")
             setTitle("")
-            setSlug("")
             setCategory("")
-            setNewContent("")
+            setContent("")
             setLoading(false)
         }
     }
-
 
     useEffect(() => {
         params.slug[0] === "news" ? params.slug[1] ? getItem("news", params.slug[1]) : null : getItem("news", params.slug[0])
@@ -77,6 +85,7 @@ const Page = ({ params }: Props) => {
     }
 
     const updateNews = async (body: any, id: string) => {
+
         const result = await UserAuthen.editItem(currentUser.position, "news", body, id)
         if (result.success) {
             toPage.push('/admin/news/')
@@ -105,6 +114,18 @@ const Page = ({ params }: Props) => {
     useEffect(() => {
         currentAlert.value === true && id && deleteItem(currentUser.position, "news", id)
     }, [currentAlert.value])
+
+    const getPicbyId = async (id: string) => {
+        const result = await NoUser.getPicById(id)
+        if (result.success) {
+            setPics([result.data[0].name])
+        }
+    }
+
+    useEffect(() => {
+        idPic && getPicbyId(idPic)
+    }, [idPic])
+
     return (
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
@@ -140,15 +161,14 @@ const Page = ({ params }: Props) => {
                                 func: () => { setSavable(true), setCategory("災害情報") },
                             }]} width='max-content'
                     />
-                    <TextAreaTool onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} />
+                    <TextAreaTool_v2 onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} onGetPic={() => { setModalOpen(true) }} pics={pics} />
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.push('/admin/news/')} />
                         {params.slug[0] === "news" ? <Button name='作成' onClick={() => createNews(body)} disable={!savable} /> : <Button name='保存' onClick={() => updateNews(body, id)} disable={!savable} />}
                         {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => store.dispatch(setAlert({ value: false, msg: "このニュースページを削除したいですか？", open: true }))} /> : null}
-
-                        {/* {id ? <Button name='保存' onClick={() => updateNews(body, id)} /> : <Button name='作成' onClick={() => createNews(body)} />} */}
                     </div>
                 </div>
+                <ImageModal modalOpen={modalOpen} onCanel={() => setModalOpen(false)} onSubmit={(id) => { setidPic(id); setModalOpen(false) }} />
             </div>
     )
 

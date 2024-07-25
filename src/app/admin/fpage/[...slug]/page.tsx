@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import { setNotice } from '@/redux/reducer/noticeReducer'
 import { AlertType } from '@/redux/reducer/alertReducer'
 import { setAlert } from '@/redux/reducer/alertReducer'
+import moment from 'moment'
 type Props = {
     params: { slug: string }
 }
@@ -36,7 +37,8 @@ const Page = ({ params }: Props) => {
     const [title, setTitle] = useState<string>("")
 
     const [id, setId] = useState<string>("")
-    const [slug, setSlug] = useState<string>("")
+    const [slug, setSlug] = useState<string>("page_" + moment(new Date).format("YYYY_MM_DD_HH_mm"))
+
     const [content, setContent] = useState<string>("")
     const [newContent, setNewContent] = useState<string>("")
 
@@ -51,7 +53,6 @@ const Page = ({ params }: Props) => {
         } else {
             setId("")
             setTitle("")
-            setSlug("")
             setNewContent("")
             setLoading(false)
         }

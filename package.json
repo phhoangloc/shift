@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^42.0.1",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.19",
@@ -17,6 +18,10 @@
     "axios": "^1.7.2",
     "basic-ftp": "^5.0.5",
     "bcrypt": "^5.1.1",
+    "draft-convert": "^2.1.13",
+    "draft-js": "^0.11.7",
+    "draft-js-export-html": "^1.4.1",
+    "draft-js-import-html": "^1.4.1",
     "formidable": "^3.5.1",
     "imap": "^0.8.19",
     "jsonwebtoken": "^9.0.2",
@@ -31,6 +36,8 @@
     "redux": "^5.0.1"
   },
   "devDependencies": {
+    "@types/draft-convert": "^2.1.8",
+    "@types/draft-js": "^0.11.18",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

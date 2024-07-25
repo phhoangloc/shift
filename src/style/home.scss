@@ -279,6 +279,7 @@
             height: 100px;
             line-height: 25px;
             font-family: serif;
+
         }
 
         h3 {
@@ -391,6 +392,16 @@
 
         div {
             margin: 5px 0;
+        }
+
+        p {
+            font-size: 1rem;
+        }
+
+        figure {
+            img {
+                width: 100%;
+            }
         }
     }
 

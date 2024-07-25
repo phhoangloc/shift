@@ -14,6 +14,8 @@ import ImageModal from '@/component/modal/imageModal'
 import Accordion from '@/component/tool/accordion'
 import { setNotice } from '@/redux/reducer/noticeReducer'
 import { AlertType, setAlert } from '@/redux/reducer/alertReducer'
+import moment from 'moment'
+import TextAreaTool_v2 from '@/component/input/textareaTool_v2'
 type Props = {
     params: { slug: string }
 }
@@ -39,13 +41,17 @@ const Page = ({ params }: Props) => {
     const [title, setTitle] = useState<string>("")
     const [modelName, setModelName] = useState<string>("")
     const [id, setId] = useState<string>("")
-    const [slug, setSlug] = useState<string>("")
+    const [slug, setSlug] = useState<string>("staff_" + moment(new Date).format("YYYY_MM_DD_HH_mm"))
     const [position, setPosition] = useState<string>("")
     const [cover, setCover] = useState<string>("")
+    const [isCover, setIsCover] = useState<boolean>(false)
     const [content, setContent] = useState<string>("")
     const [newContent, setNewContent] = useState<string>("")
     const [preview, setPreview] = useState<any>("")
 
+    const [pics, setPics] = useState<string[]>([])
+    const [idPic, setidPic] = useState<string>("")
+    const [isIdPic, setIsIdPic] = useState<boolean>(false)
 
     const getItem = async (g: string, s: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s })
@@ -63,7 +69,6 @@ const Page = ({ params }: Props) => {
             setModelName("")
             setId("")
             setTitle("")
-            setSlug("")
             setNewContent("")
             setLoading(false)
         }
@@ -119,6 +124,16 @@ const Page = ({ params }: Props) => {
         currentAlert.value === true && id && deleteItem(currentUser.position, "staff", id)
     }, [currentAlert.value])
 
+    const getPicbyIds = async (id: string) => {
+        const result = await NoUser.getPicById(id)
+        if (result.success) {
+            setPics([result.data[0].name])
+        }
+    }
+
+    useEffect(() => {
+        idPic && getPicbyIds(idPic)
+    }, [idPic])
     return (
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
@@ -138,51 +153,50 @@ const Page = ({ params }: Props) => {
                     <div className='edittitle'><h3>この{modelName}の編集</h3></div>
                     <Input name="名前" onChange={(v) => { setSavable(true), setTitle(v) }} value={title} />
                     <Input name="スラグ" onChange={(v) => { setSavable(true), setSlug(v) }} value={slug} />
-                    <Accordion title={position ? position : "職種"}
-                        data={[
-                            {
-                                name: "---",
-                                func: () => { setSavable(true), setPosition("") },
-                            },
-                            {
-                                name: "社長",
-                                func: () => { setSavable(true), setPosition("社長") },
-                            },
-                            {
-                                name: "部長",
-                                func: () => { setSavable(true), setPosition("部長") },
-                            },
-                            {
-                                name: "社員",
-                                func: () => { setSavable(true), setPosition("社員") },
-                            },
-                            {
-                                name: "バイト",
-                                func: () => { setSavable(true), setPosition("バイト") },
-                            },
-                        ]} width='max-content'
+                    <Accordion title={position ? position : "職種"} data={[
+                        {
+                            name: "---",
+                            func: () => { setSavable(true), setPosition("") },
+                        },
+                        {
+                            name: "社長",
+                            func: () => { setSavable(true), setPosition("社長") },
+                        },
+                        {
+                            name: "部長",
+                            func: () => { setSavable(true), setPosition("部長") },
+                        },
+                        {
+                            name: "社員",
+                            func: () => { setSavable(true), setPosition("社員") },
+                        },
+                        {
+                            name: "バイト",
+                            func: () => { setSavable(true), setPosition("バイト") },
+                        },
+                    ]} width='max-content'
                     />
                     <div style={{ position: "relative", minHeight: "50px", minWidth: "100px" }}>
                         <p>画像:</p>
                         <div style={{ border: "1px solid #aaa", width: "max-content", height: "300px", overflow: "hidden", position: "relative" }}>
                             {
-                                preview && <Image src={preview} alt='item' width={500} height={500} style={{ height: "100%", width: "auto" }} priority sizes='100%' />
+                                preview ?
+                                    <Image src={preview} alt='item' width={500} height={500} style={{ height: "100%", width: "auto" }} priority sizes='100%' /> :
+                                    <Image src={"/image/staff.jpg"} alt='item' width={500} height={500} style={{ height: "100%", width: "auto" }} priority sizes='100%' />
                             }
-                            <UploadIcon onClick={(e) => setModalOpen(true)} style={{ position: "absolute", zIndex: 1, background: "white", borderRadius: "5px", bottom: "5px", right: "5px", padding: "1px", cursor: "pointer" }} />
+                            <UploadIcon onClick={(e) => { setIsCover(true), setModalOpen(true), setIsIdPic(false) }} style={{ position: "absolute", zIndex: 1, background: "white", borderRadius: "5px", bottom: "5px", right: "5px", padding: "1px", cursor: "pointer" }} />
                         </div>
                     </div>
-                    <TextAreaTool onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} />
+                    <TextAreaTool_v2 onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} onGetPic={() => { setIsCover(false), setModalOpen(true), setIsIdPic(true) }} pics={pics} />
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.push('/admin/staff/')} />
                         {id ? <Button name='保存' onClick={() => updateNews(body, id)} disable={!savable} /> : <Button name='作成' onClick={() => createNews(body)} disable={!savable} />}
                         {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => store.dispatch(setAlert({ value: false, open: true, msg: "このスタッフのページを削除したいですか？" }))} /> : null}
                     </div>
                 </div>
-                <ImageModal modalOpen={modalOpen} onCanel={() => setModalOpen(false)} onSubmit={(id: string) => { setModalOpen(false), setCover(id) }} />
+                <ImageModal modalOpen={modalOpen} onCanel={() => setModalOpen(false)} onSubmit={(id: string) => { setModalOpen(false), isCover && setCover(id), isIdPic && setidPic(id) }} />
             </div>
     )
-
-
 }
 
 export default Page

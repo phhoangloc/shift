@@ -46,6 +46,7 @@ const Header = (props: Props) => {
         currentAlert.value === false && currentAlert.open === false && setIsLogout(false)
 
     }, [currentAlert.value, currentAlert.open, isLogout])
+
     return (
         <div className='header'>
             <IconToggle

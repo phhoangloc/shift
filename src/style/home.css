@@ -387,6 +387,14 @@
   margin: 5px 0;
 }
 
+.detail .dangerousBox p {
+  font-size: 1rem;
+}
+
+.detail .dangerousBox figure img {
+  width: 100%;
+}
+
 .detail .contact {
   width: 100%;
   padding: 5%;

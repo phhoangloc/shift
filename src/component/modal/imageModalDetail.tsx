@@ -100,7 +100,7 @@ const ImageModalDetail = ({ item, func, deletePic }: Props) => {
                         <div style={{ display: "flex", border: "1px solid", height: "40px", lineHeight: "40px", padding: "0px 5px", borderRadius: "5px", justifyContent: "space-between" }}  >
                             <p style={{ width: "100%", textWrap: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                                 {process.env.FTP_URL + "img/shift/" + item.name} </p>
-                            {isCopy ? <LibraryAddCheckIcon className='svg30px' /> : <ContentCopyIcon className='svg30px svg_hover' onClick={() => { navigator.clipboard.writeText(process.env.ftp_url + "locand/" + item.name); setIsCopy(true) }} />}
+                            {isCopy ? <LibraryAddCheckIcon className='svg30px' /> : <ContentCopyIcon className='svg30px svg_hover' onClick={() => { navigator.clipboard.writeText(process.env.FTP_URL + "img/shift/" + item.name); setIsCopy(true) }} />}
                         </div>
                     </div>
                     <div className='xs12 title-hover' style={{ width: "max-content", height: "40px", margin: "10px 0 0 auto" }}>
