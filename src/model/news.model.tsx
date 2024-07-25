@@ -15,9 +15,10 @@ const newsSchema = new Schema({
     content: {
         type: String,
     },
-    category: {
-        type: String,
-    },
+    category: [{
+        type: Schema.Types.ObjectId,
+        ref: "category"
+    }],
     createDate: {
         type: Date,
         default: Date.now,

@@ -11,6 +11,7 @@ const Home = () => {
 
     const getItem = async (g: string, c: string) => {
         const result = await NoUser.getItem({ genre: g, category: c })
+        console.log(result)
         if (result.success) {
             setNews(result.data)
             setPageName(result.name)
@@ -37,7 +38,7 @@ const Home = () => {
                 {news.map((n: any, index: number) =>
                     <div key={index} className='item' >
                         <h4 onClick={() => topage.push("/home/news/" + n.slug)}><span>{moment(n.createDate).format('YY/MM/DD')}</span> {n.title}</h4>
-                        <p>{n.category}</p>
+                        {n.category?.map((c: any, index: number) => <p key={index}>{c.name}</p>)}
                     </div>)}
             </div>
         </div>

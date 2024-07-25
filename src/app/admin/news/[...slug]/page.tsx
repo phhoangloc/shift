@@ -46,7 +46,8 @@ const Page = ({ params }: Props) => {
     const [modelName, setModelName] = useState<string>("")
     const [id, setId] = useState<string>("")
     const [slug, setSlug] = useState<string>(params.slug[0] + "_" + moment(new Date).format("YYYY_MM_DD_HH_mm"))
-    const [category, setCategory] = useState<string>("")
+    const [category, setCategory] = useState<string[]>([])
+    const [categoryArray, setCategoryArray] = useState<any[]>([])
     const [content, setContent] = useState<any>("")
     const [newContent, setNewContent] = useState<any>("")
 
@@ -55,6 +56,7 @@ const Page = ({ params }: Props) => {
 
     const getItem = async (g: string, s: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s })
+        console.log(result)
         if (result.success && result.data[0]?._id) {
             setModelName(result.name)
             setId(result.data[0]._id)
@@ -68,7 +70,7 @@ const Page = ({ params }: Props) => {
             setModelName("")
             setId("")
             setTitle("")
-            setCategory("")
+            setCategory([])
             setContent("")
             setLoading(false)
         }
@@ -124,6 +126,18 @@ const Page = ({ params }: Props) => {
         idPic && getPicbyId(idPic)
     }, [idPic])
 
+    const getCategory = async () => {
+        const result = await NoUser.getItem({ genre: "category" })
+        if (result.success) {
+            setCategoryArray(result.data)
+        } else {
+            setCategoryArray([])
+        }
+    }
+    useEffect(() => {
+        getCategory()
+    }, [])
+    console.log(category)
     return (
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
@@ -144,21 +158,17 @@ const Page = ({ params }: Props) => {
                     <div className='edittitle'><h3>このページの編集</h3></div>
                     <Input name="タイトル" onChange={(v) => { setSavable(true), setTitle(v) }} value={title} />
                     <Input name="スラグ" onChange={(v) => { setSavable(true), setSlug(v) }} value={slug} />
-                    <Accordion title={category ? category : "category"}
-                        data={[
-                            {
-                                name: "---",
-                                func: () => { setSavable(true), setCategory("") },
-                            },
-                            {
-                                name: "お知らせ",
-                                func: () => { setSavable(true), setCategory("お知らせ") },
-                            },
-                            {
-                                name: "災害情報",
-                                func: () => { setSavable(true), setCategory("災害情報") },
-                            }]} width='max-content'
-                    />
+                    <div>
+                        <p>カテゴリー</p>
+                        <div style={{ display: "flex", flexWrap: "wrap", }}>
+                            {categoryArray.length ?
+                                categoryArray.map((item: any, index: number) =>
+                                    <p onClick={() => setCategory(cates => cates && cates.includes(item._id) ? cates.filter(c => c.toString() != item._id.toString()) : [...cates, item._id])} key={index}
+                                        style={{ margin: "5px", padding: "5px", borderRadius: "5px", background: category && category?.includes(item._id) ? "#006699" : "inherit", color: category && category.includes(item._id) ? "white" : "inherit", cursor: "pointer" }}>
+                                        {item.name}</p>) :
+                                <p>カテゴリーがない</p>}
+                        </div>
+                    </div>
                     <TextAreaTool_v2 onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} onGetPic={() => { setModalOpen(true) }} pics={pics} />
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.push('/admin/news/')} />

@@ -1,9 +1,16 @@
 
-GET https://localhost:3000/api/pic?id=668fa4dd820d6ef9e48667be
+GET https://localhost:3000/api/news
 Content-Type: application/json
-Authorization: "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NWVkY2ZlODU4MGE2ZWY1MmE5NjE2OCIsImlhdCI6MTcyMDY5MDU1NywiZXhwIjoxNzIwNzc2OTU3fQ.FAJdgTWskHMZJzACb5F7iLks0MsXW4cj_uX5_LWz4cM
+Authorization: "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NWVkY2ZlODU4MGE2ZWY1MmE5NjE2OCIsImlhdCI6MTcyMTg3MzMwMiwiZXhwIjoxNzIxOTU5NzAyfQ.mO4kG94WspB8DMu4M96KyxtwZu8okwMEoacTr2lh9Ko
+
 ###
-GET https://locpham.free.nf/img/staffitem.jpg
+POST https://localhost:3000/api/user
+Content-Type: application/json
+Authorization: "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NWVkY2ZlODU4MGE2ZWY1MmE5NjE2OCIsImlhdCI6MTcyMTg3MzMwMiwiZXhwIjoxNzIxOTU5NzAyfQ.mO4kG94WspB8DMu4M96KyxtwZu8okwMEoacTr2lh9Ko
+
+{
+    "name":"災害情報"
+}
 ###
 post https://localhost:3000/api/login
 Content-Type: application/json

@@ -39,7 +39,7 @@ const Page = () => {
                 {news.map((n: any, index: number) =>
                     <div key={index} className='item' >
                         <h4 onClick={() => topage.push("/home/news/" + n.slug)}> {n.title}</h4>
-                        <p>{n.category}</p>
+                        <div className='category' style={{ display: "flex", flexWrap: "wrap" }}>{n.category?.map((c: any, index: number) => <p key={index}>{c.name}</p>)}</div>
                         <p>{moment(n.createDate).format('YY/MM/DD')}</p>
                     </div>)}
             </div>

@@ -240,14 +240,20 @@
                 }
             }
 
-            p {
-                font-size: 0.75rem;
-                height: max-content;
-                border-radius: 25px;
-                color: red;
+            .category {
+
+                p {
+                    font-size: 0.9rem;
+                    height: max-content;
+                    border-radius: 25px;
+                    color: red;
+                    margin: 0 5px 0 0;
+                    font-weight: bold;
+                }
             }
 
-            p:nth-child(3) {
+            p {
+                font-size: 0.9rem;
                 color: inherit;
                 opacity: 0.5;
             }

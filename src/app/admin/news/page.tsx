@@ -6,8 +6,6 @@ import store from '@/redux/store'
 import Pagination from '@/component/tool/pagination'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import SearchBox from '@/component/input/searchBox'
 import Link from 'next/link'
@@ -48,8 +46,8 @@ const Page = ({ params }: Props) => {
     const [end, setEnd] = useState<boolean>(true)
 
 
-    const getItem = async (g: string, s: string, sk: number, li: number, sort: string) => {
-        const result = await NoUser.getItem({ genre: g, search: s, skip: sk, limit: li, sort: sort })
+    const getItem = async (g: string, s: string, sk: number, li: number) => {
+        const result = await NoUser.getItem({ genre: g, search: s, skip: sk, limit: li })
         if (result.success) {
             setNews(result.data)
             setPageName(result.name)
@@ -60,16 +58,16 @@ const Page = ({ params }: Props) => {
             setLoading(false)
         }
     }
-    const getItemPlus = async (g: string, s: string, sk: number, li: number, sort: string) => {
-        const result = await NoUser.getItem({ genre: g, search: s, skip: sk + li, limit: li, sort: sort })
+    const getItemPlus = async (g: string, s: string, sk: number, li: number) => {
+        const result = await NoUser.getItem({ genre: g, search: s, skip: sk + li, limit: li })
         setEnd(result.data?.length ? false : true)
     }
 
     const topage = useRouter()
 
     useEffect(() => {
-        getItem("news", search, page * limit, limit, "createDate")
-        getItemPlus("news", search, page * limit, limit, "createDate")
+        getItem("news", search, page * limit, limit,)
+        getItemPlus("news", search, page * limit, limit,)
     }, [refresh, search, page])
 
     setTimeout(() => {
@@ -111,8 +109,6 @@ const Page = ({ params }: Props) => {
                             <p style={{ overflow: "hidden", textWrap: "nowrap", textOverflow: "ellipsis" }}>{moment(n.createDate).format('YY/MM/DD')}</p>
                             <div className="icons">
                                 <Link href={"/home/news/" + n.slug} target='_blank'><RemoveRedEyeOutlinedIcon /></Link>
-                                {/* <EditOutlinedIcon onClick={() => topage.push("/admin/news/" + n.slug)} /> */}
-                                {/* <ContentCopyIcon onClick={() => topage.push("/admin/news/news/" + n.slug)} /> */}
                                 <DeleteOutlineOutlinedIcon onClick={() => { setItemId(n._id); store.dispatch(setAlert({ value: false, msg: "このニュースページを削除したいですか？", open: true })) }} />
                             </div>
                         </div>)}

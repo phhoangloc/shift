@@ -244,14 +244,17 @@
   font-size: 0.9rem;
 }
 
-.archive .news .item p {
-  font-size: 0.75rem;
+.archive .news .item .category p {
+  font-size: 0.9rem;
   height: max-content;
   border-radius: 25px;
   color: red;
+  margin: 0 5px 0 0;
+  font-weight: bold;
 }
 
-.archive .news .item p:nth-child(3) {
+.archive .news .item p {
+  font-size: 0.9rem;
   color: inherit;
   opacity: 0.5;
 }

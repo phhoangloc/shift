@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PeopleIcon from '@mui/icons-material/People';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import CategoryIcon from '@mui/icons-material/Category';
 type Props = {}
 
 const Menu = (props: Props) => {
@@ -59,6 +60,11 @@ const Menu = (props: Props) => {
             icon: <InsertPhotoIcon />,
             name: "メディア",
             link: "/media"
+        },
+        {
+            icon: <CategoryIcon />,
+            name: "カテゴリー",
+            link: "category"
         },
     ]
 
