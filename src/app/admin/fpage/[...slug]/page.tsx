@@ -12,6 +12,8 @@ import { setNotice } from '@/redux/reducer/noticeReducer'
 import { AlertType } from '@/redux/reducer/alertReducer'
 import { setAlert } from '@/redux/reducer/alertReducer'
 import moment from 'moment'
+import TextAreaTool_v2 from '@/component/input/textareaTool_v2'
+import ImageModal from '@/component/modal/imageModal'
 type Props = {
     params: { slug: string }
 }
@@ -32,6 +34,8 @@ const Page = ({ params }: Props) => {
         update()
     })
 
+    const [modalOpen, setModalOpen] = useState<boolean>(false)
+
     const [loading, setLoading] = useState<boolean>(false)
     const [savable, setSavable] = useState<boolean>(false)
     const [title, setTitle] = useState<string>("")
@@ -41,6 +45,9 @@ const Page = ({ params }: Props) => {
 
     const [content, setContent] = useState<string>("")
     const [newContent, setNewContent] = useState<string>("")
+
+    const [pics, setPics] = useState<string[]>([])
+    const [idPic, setidPic] = useState<string>("")
 
     const getItem = async (g: string, s: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s })
@@ -97,6 +104,17 @@ const Page = ({ params }: Props) => {
         currentAlert.value === true && id && deleteItem(currentUser.position, "fpage", id)
     }, [currentAlert.value])
 
+    const getPicbyId = async (id: string) => {
+        const result = await NoUser.getPicById(id)
+        if (result.success) {
+            setPics([result.data[0].name])
+        }
+    }
+
+    useEffect(() => {
+        idPic && getPicbyId(idPic)
+    }, [idPic])
+
     return (
         loading ? <div className={`detail`}>loading...</div> :
             <div className={`detail`}>
@@ -116,13 +134,14 @@ const Page = ({ params }: Props) => {
                     <div className='edittitle'><h3>このページの編集 </h3></div>
                     <Input name="タイトル" onChange={(v) => { setSavable(true), setTitle(v) }} value={title} />
                     <Input name="スラグ" onChange={(v) => { setSavable(true), setSlug(v) }} value={slug} />
-                    <TextAreaTool onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} />
+                    <TextAreaTool_v2 onChange={(v) => { setSavable(true), setNewContent(v) }} value={content} onGetPic={() => { setModalOpen(true) }} pics={pics} />
                     <div style={{ display: 'flex' }}>
                         <Button name='戻る' onClick={() => toPage.push('/admin/fpage/')} />
                         {params.slug[0] === "news" ? <Button name='作成' onClick={() => createNews(body)} /> : <Button name='保存' onClick={() => updateNews(body, id)} disable={!savable} />}
                         {params.slug[0] !== "news" && id ? <Button name='削除' onClick={() => store.dispatch(setAlert({ value: false, msg: "このページを削除したいですか？", open: true }))} /> : null}
                     </div>
                 </div>
+                <ImageModal modalOpen={modalOpen} onCanel={() => setModalOpen(false)} onSubmit={(id) => { setidPic(id); setModalOpen(false) }} />
             </div>
     )
 

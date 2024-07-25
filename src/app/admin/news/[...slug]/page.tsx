@@ -78,8 +78,6 @@ const Page = ({ params }: Props) => {
         params.slug[0] === "news" ? params.slug[1] ? getItem("news", params.slug[1]) : null : getItem("news", params.slug[0])
     }, [])
 
-
-
     const body = {
         title, slug, category, content: newContent || content, editDate: new Date()
     }
