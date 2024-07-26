@@ -44,7 +44,12 @@ const Menu = (props: Props) => {
         {
             icon: <FeedIcon />,
             name: "ニュース",
-            link: "/news"
+            link: "/news",
+        },
+        {
+            icon: <CategoryIcon />,
+            name: "カテゴリー",
+            link: "category"
         },
         {
             icon: <PeopleIcon />,
@@ -61,21 +66,20 @@ const Menu = (props: Props) => {
             name: "メディア",
             link: "/media"
         },
-        {
-            icon: <CategoryIcon />,
-            name: "カテゴリー",
-            link: "category"
-        },
+
     ]
 
     return (
         <div className={`menubackground ${currentMenu ? "menubackgroundOn" : "menuBackgroundOff"}`}>
             <div className={`menu ${currentMenu ? "menuOn" : ""}  ${currentTheme ? "light1" : "dark1"}`}>
                 <div className='iconClose'><CloseIcon onClick={() => store.dispatch(setMenu(false))} /></div>
-                {menus.map((menu: any, index: number) => <div key={index} className='item' onClick={() => { toPage.push("/admin/" + menu.link), store.dispatch(setMenu(false)) }}>
-                    <div className='icon'>{menu.icon}</div>
-                    <p>{menu.name}</p>
-                </div>)}
+                {menus.map((menu: any, index: number) =>
+                    <>
+                        <div key={index} className='item' onClick={() => { toPage.push("/admin/" + menu.link), store.dispatch(setMenu(false)) }}>
+                            <div className='icon'>{menu.icon}</div>
+                            <p>{menu.name}</p>
+                        </div>
+                    </>)}
             </div>
         </div>
     )

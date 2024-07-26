@@ -1,6 +1,5 @@
 
-GET https://localhost:3000/api/news
-Content-Type: application/json
+GET https://localhost:3000/api/category
 
 ###
 POST https://localhost:3000/api/user

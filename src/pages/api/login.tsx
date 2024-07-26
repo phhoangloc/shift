@@ -49,7 +49,7 @@ const login = async (
 
                     result = {
                         success: true,
-                        message: "login success!",
+                        message: "ログインを成功しました。",
                         result: token,
                     }
 
@@ -59,7 +59,7 @@ const login = async (
                 } else {
                     result = {
                         success: false,
-                        message: "パスワードが合ってないんです。",
+                        message: "入力したパスワードが間違いです",
                     }
 
                     res.json(result)

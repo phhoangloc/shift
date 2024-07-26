@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react'
 import store from '@/redux/store'
 import NoUser from '@/api/noUser'
 import Input from '@/component/input/input'
-import TextAreaTool from '@/component/input/textareaTool'
-import Accordion from '@/component/tool/accordion'
 import Button from '@/component/input/button'
 import { UserAuthen } from '@/api/UserAuthen'
 import Link from 'next/link'
@@ -43,7 +41,6 @@ const Page = ({ params }: Props) => {
     const [savable, setSavable] = useState<boolean>(false)
 
     const [title, setTitle] = useState<string>("")
-    const [modelName, setModelName] = useState<string>("")
     const [id, setId] = useState<string>("")
     const [slug, setSlug] = useState<string>(params.slug[0] + "_" + moment(new Date).format("YYYY_MM_DD_HH_mm"))
     const [category, setCategory] = useState<string[]>([])
@@ -57,7 +54,6 @@ const Page = ({ params }: Props) => {
     const getItem = async (g: string, s: string) => {
         const result = await NoUser.getItem({ genre: g, slug: s })
         if (result.success && result.data[0]?._id) {
-            setModelName(result.name)
             setId(result.data[0]._id)
             params.slug[1] ? setTitle(result.data[0].title + "コピー") : setTitle(result.data[0].title)
             params.slug[1] ? setSlug(result.data[0].slug + "_copy") : setSlug(result.data[0].slug)
@@ -66,7 +62,6 @@ const Page = ({ params }: Props) => {
             setLoading(false)
 
         } else {
-            setModelName("")
             setId("")
             setTitle("")
             setCategory([])

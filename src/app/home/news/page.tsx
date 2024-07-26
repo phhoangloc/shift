@@ -6,35 +6,50 @@ import moment from 'moment'
 
 
 const Page = () => {
-    const topage = useRouter()
-
-    const [category, setCategory] = useState<string>("")
     const [news, setNews] = useState<any[]>([])
-    const [pageName, setpageName] = useState<"">("")
+    const [newsLimit, setNewsLimit] = useState<any[]>([])
+    const [pageName, setPageName] = useState<string>("")
+    const [category, setCategory] = useState<string>("")
+    const [categories, setCategories] = useState<any[]>([])
 
     const getItem = async (g: string, c: string) => {
         const result = await NoUser.getItem({ genre: g, category: c })
         if (result.success) {
             setNews(result.data)
-            setpageName(result.name)
-        } else {
-            setNews([])
-            setpageName("")
         }
     }
+    const getItemLimit = async (g: string, c: string) => {
+        const result = await NoUser.getItem({ genre: g, category: c, limit: 1 })
+        if (result.success) {
+            setNewsLimit(result.data)
 
+        }
+    }
+    const getCategory = async (g: string) => {
+        const result = await NoUser.getItem({ genre: g })
+        if (result.success) {
+            setCategories(result.data)
+        }
+    }
     useEffect(() => {
         getItem("news", category)
     }, [category])
 
+    useEffect(() => {
+        getItemLimit("news", "66a1b456b5be3ef6af8de852")
+    }, [])
+    useEffect(() => {
+        getCategory("category")
+    }, [])
+    const topage = useRouter()
+
     return (
         <div className='archive'>
             <div className='news'>
-                <h1>{pageName}</h1>
-                <div className='categorySelect'>
+                <h1>ニュース</h1>
+                <div className='grid_box categorySelect'>
                     <p onClick={() => setCategory("")}>すべて</p>
-                    <p onClick={() => setCategory("お知らせ")}>お知らせ</p>
-                    <p onClick={() => setCategory("災害情報")}>災害情報</p>
+                    {categories.map((n: any, index: number) => <p key={index} onClick={() => setCategory(n._id)}>{n.name}</p>)}
                 </div>
                 {news.map((n: any, index: number) =>
                     <div key={index} className='item' >

@@ -68,7 +68,6 @@
     }
 }
 
-
 .home {
     min-height: calc(100vh - 200px);
     max-width: 1200px;
@@ -78,6 +77,36 @@
         position: relative;
         width: 100%;
         height: 400px;
+    }
+
+    .newsLimit {
+        display: flex;
+        width: 100%;
+        max-width: 768px;
+        margin: 50px auto;
+        background-color: whitesmoke;
+        border-radius: 5px;
+
+
+        .title {
+            padding: 5px;
+            background-color: red;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .item {
+            display: flex;
+            padding: 5px;
+            cursor: pointer;
+
+
+            span {
+                opacity: 0.75;
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
     }
 
     .news {
@@ -118,32 +147,56 @@
 
         }
 
-        .item {
-            height: 30px;
-            line-height: 30px;
-            border-bottom: 1px solid #888;
-            margin: 5px 0;
-            display: flex;
+        .items {
+            margin: 10px 0;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px #888;
 
-            h4 {
-                cursor: pointer;
+            .item {
+                border-bottom: 1px solid #888;
+                margin: 5px 0;
+                padding: 5px;
 
-                span {
-                    opacity: 0.75;
+                .time {
+                    opacity: 0.5;
                     font-size: 0.9rem;
+                    padding: 5px;
+                    font-weight: bold;
+
+                }
+
+                h4 {
+                    cursor: pointer;
+                    overflow: hidden;
+                    text-wrap: nowrap;
+                    text-overflow: ellipsis;
+                }
+
+                h4:hover {
+                    text-decoration: underline;
+                }
+
+                p {
+                    font-size: 0.65rem;
+                    height: max-content;
+                    padding: 5px 10px;
+                    margin: 0 5px;
+                    background-color: whitesmoke;
+                    border-radius: 25px;
+                    font-weight: bold;
+                }
+
+                @media (min-width:575px) {
+                    display: flex;
                 }
             }
 
-            p {
-                font-size: 0.75rem;
-                color: red;
-                padding: 0 5px;
-                margin: auto 5px;
-                height: max-content;
-                border-radius: 25px;
+
+            .item:nth-last-child(1) {
+                border: inherit;
             }
         }
-
     }
 }
 

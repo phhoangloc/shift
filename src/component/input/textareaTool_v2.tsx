@@ -36,7 +36,6 @@ const TextAreaTool_v2 = ({ onChange, value, onGetPic, pics }: Props) => {
     const inputRef = useRef<any>()
     const inputValueLeftRef = useRef<any>()
 
-
     const [focus, setFocus] = useState<boolean>(false)
     const [inputLeftValue, setInputLeftValue] = useState<string>("")
     const [inputType, setInputType] = useState<string>("")

@@ -31,7 +31,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../my-app/src/component/modal/imageModal_v2.tsx"
   ],
   "exclude": [
     "node_modules"
