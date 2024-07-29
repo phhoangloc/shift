@@ -74,12 +74,11 @@ const Menu = (props: Props) => {
             <div className={`menu ${currentMenu ? "menuOn" : ""}  ${currentTheme ? "light1" : "dark1"}`}>
                 <div className='iconClose'><CloseIcon onClick={() => store.dispatch(setMenu(false))} /></div>
                 {menus.map((menu: any, index: number) =>
-                    <>
-                        <div key={index} className='item' onClick={() => { toPage.push("/admin/" + menu.link), store.dispatch(setMenu(false)) }}>
-                            <div className='icon'>{menu.icon}</div>
-                            <p>{menu.name}</p>
-                        </div>
-                    </>)}
+                    <div key={index} className='item' onClick={() => { toPage.push("/admin/" + menu.link), store.dispatch(setMenu(false)) }}>
+                        <div className='icon'>{menu.icon}</div>
+                        <p>{menu.name}</p>
+                    </div>
+                )}
             </div>
         </div>
     )

@@ -152,13 +152,16 @@ const Page = ({ params }: Props) => {
                     <Input name="タイトル" onChange={(v) => { setSavable(true), setTitle(v) }} value={title} />
                     <Input name="スラグ" onChange={(v) => { setSavable(true), setSlug(v) }} value={slug} />
                     <div>
-                        <p>カテゴリー</p>
-                        <div style={{ display: "flex", flexWrap: "wrap", }}>
+                        <h4>カテゴリー</h4>
+                        <div style={{ height: "150px", overflow: "auto", background: "whitesmoke", padding: "0 5px" }}>
+                            {/* <div style={{ display: "flex", flexWrap: "wrap", }}> */}
                             {categoryArray.length ?
                                 categoryArray.map((item: any, index: number) =>
-                                    <p onClick={() => setCategory(cates => cates && cates.includes(item._id) ? cates.filter(c => c.toString() != item._id.toString()) : [...cates, item._id])} key={index}
-                                        style={{ margin: "5px", padding: "5px", borderRadius: "5px", background: category && category.includes(item._id || { _id: item._id }) ? "#006699" : "inherit", color: category && category.toString().includes(item._id) ? "white" : "inherit", cursor: "pointer" }}>
-                                        {item.name}</p>) :
+                                    <div style={{ display: "flex", margin: "5px", fontSize: "1.1rem" }} key={index}>
+                                        <input type='checkbox' style={{ marginRight: "5px", cursor: "pointer" }} checked={category.includes(item._id)} onChange={() => setCategory(cates => cates && cates.includes(item._id) ? cates.filter(c => c.toString() != item._id.toString()) : [...cates, item._id])}></input>
+                                        <p>{item.name}</p>
+                                    </div>
+                                ) :
                                 <p>カテゴリーがない</p>}
                         </div>
                     </div>
