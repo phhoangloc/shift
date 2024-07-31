@@ -344,7 +344,7 @@
   color: red;
 }
 
-.archive .staff p {
+.archive .staff .detailword {
   width: max-content;
   margin: 0 10px 0 auto;
   cursor: pointer;

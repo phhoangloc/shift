@@ -56,8 +56,8 @@ const Page = ({ params }: Props) => {
                                 }
                             </div>
                             <h3> {n.title}</h3>
-                            <div className='dangerousBox' dangerouslySetInnerHTML={{ __html: n.content }}></div>
-                            <p onClick={() => topage.push("/home/staff/" + n.slug)}>詳細</p>
+                            <div className='dangerousBox' dangerouslySetInnerHTML={{ __html: n.content }} style={{ overflow: "hidden" }}></div>
+                            <p className='detailword' onClick={() => topage.push("/home/staff/" + n.slug)}>詳細</p>
                         </div>)}
                 </div>
             </div>
